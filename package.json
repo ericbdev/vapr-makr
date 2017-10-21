@@ -3,15 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "jss": "latest",
+    "jss-preset-default": "latest",
     "material-ui": "^1.0.0-beta.17",
     "node-sass-chokidar": "0.0.3",
     "npm-run-all": "^4.1.1",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-jss": "latest",
+    "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.14",
     "react-tap-event-plugin": "^3.0.2",
+    "recompose": "latest",
     "typeface-roboto": "0.0.41"
   },
   "scripts": {

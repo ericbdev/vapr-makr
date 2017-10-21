@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
+import withRoot from './withRoot';
 
-import theme from '../config/theme';
-import appConfig from '../config/config';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
-
-injectTapEventPlugin();
+const styles = {
+  root: {
+    textAlign: 'center',
+    paddingTop: 200,
+  },
+};
 
 class App extends Component {
   render() {
     return (
-      <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
-        <AppBar title={appConfig.appName}/>
-      </MuiThemeProvider>
+      <div className={this.props.classes.root}>
+        <span className="todo">TODO</span>
+      </div>
     );
   }
 }
 
-export default App;
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withRoot(withStyles(styles)(App));
