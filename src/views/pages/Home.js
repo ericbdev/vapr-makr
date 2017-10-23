@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import withRoot from './withRoot';
 
 const styles = {
   root: {
@@ -10,18 +9,18 @@ const styles = {
   },
 };
 
-class App extends Component {
+class Home extends Component {
   render() {
     return (
       <div className={this.props.classes.root}>
-        <span className="todo">TODO</span>
+        <span className="todo">Home</span>
       </div>
     );
   }
 }
 
-App.propTypes = {
+Home.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withRoot(withStyles(styles)(App));
+export default withStyles(styles)(Home);
