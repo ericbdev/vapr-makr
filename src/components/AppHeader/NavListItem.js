@@ -14,19 +14,18 @@ class NavListItem extends Component {
     history: PropTypes.object.isRequired,
   };
 
-  handleClick = ({history, path}) => {
-    history.push(path)
+  handleClick = (path) => {
+    this.props.history.push(path);
+    this.props.handleDrawerChange(false);
   };
 
   render() {
-    const { route, history } = this.props;
-    const {title, path} = route;
+    const { title, path } = this.props.route;
     
     return (
-      <ListItem button>
+      <ListItem button onClick={() => this.handleClick(path)}>
         <ListItemText
           primary={title}
-          onClick={() => this.handleClick({history, path})}
         />
       </ListItem>
     );
