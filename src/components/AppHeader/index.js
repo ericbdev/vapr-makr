@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
 import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import Grid from 'material-ui/Grid';
 import { Menu as IconMenu } from 'material-ui-icons';
 
 import { appConfig } from '../../config/index';
@@ -31,22 +32,18 @@ class AppHeader extends Component {
         />
 
         <AppBar>
-          <Grid container justify="flex-start" alignItems="center">
-            <Grid item xs={2}>
-              <IconButton
-                onClick={() => this.handleDrawerChange(true)}
-                onKeyDown={() => this.handleDrawerChange(true)}
-              >
-                <IconMenu />
-              </IconButton>
-            </Grid>
-
-            <Grid item xs={10}>
-              <span>
-                {appConfig.appName}
-              </span>
-            </Grid>
-          </Grid>
+          <Toolbar disableGutters>
+            <IconButton
+              onClick={() => this.handleDrawerChange(true)}
+              onKeyDown={() => this.handleDrawerChange(true)}
+              color="inherit"
+            >
+              <IconMenu />
+            </IconButton>
+            <Typography type="title" color="inherit">
+              {appConfig.appName}
+            </Typography>
+          </Toolbar>
         </AppBar>
       </div>
     )
