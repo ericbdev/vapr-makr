@@ -1,19 +1,33 @@
-const routes = [
-  {
-    id: 1,
+const routes = {
+  home: {
     title: 'Home',
     path: '/',
   },
-  {
-    id: 2,
-    title: 'About',
-    path: '/about',
+  calculator: {
+    title: 'Calculator',
+    path: '/calculator',
   },
-  {
-    id: 3,
-    title: 'Form',
-    path: '/form',
+  recipes: {
+    title: 'Recipes',
+    path: '/recipes',
   },
-];
+  stash: {
+    title: 'Stash',
+    children: {
+      flavours: {
+        title: 'Flavours',
+        path: '/stash/flavours',
+      },
+      bases: {
+        title: 'Bases',
+        path: '/stash/bases',
+      },
+      juices: {
+        title: 'Juices',
+        path: '/stash/juices',
+      },
+    },
+  },
+};
 
 export default routes;

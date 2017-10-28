@@ -9,18 +9,18 @@ const styles = {
   },
 };
 
-class About extends Component {
+class StashJuices extends Component {
   render() {
     return (
       <div className={this.props.classes.root}>
-        <span className="todo">About</span>
+        <span className="todo">StashJuices</span>
       </div>
     );
   }
 }
 
-About.propTypes = {
+StashJuices.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(About);
+export default withStyles(styles)(StashJuices);
