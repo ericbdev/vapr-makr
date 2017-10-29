@@ -36,7 +36,6 @@ AppWrapper = withStyles(styles)(AppWrapper);
 const context = createContext();
 
 class Root extends Component {
-
   componentDidMount() {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -53,13 +52,15 @@ class Root extends Component {
         <JssProvider registry={context.sheetsRegistry} jss={context.jss}>
           <AppWrapper>
             <MuiThemeProvider theme={context.theme} sheetsManager={context.sheetsManager}>
-              <AppHeader {...props} />
-              <Route exact path={routes.home.path} component={Home}/>
-              <Route path={routes.calculator.path} component={Calculator}/>
-              <Route path={routes.recipes.path} component={Recipes}/>
-              <Route path={routes.stash.children.flavours.path} component={StashFlavours}/>
-              <Route path={routes.stash.children.bases.path} component={StashBases}/>
-              <Route path={routes.stash.children.juices.path} component={StashJuices}/>
+              <div>
+                <AppHeader {...props} />
+                <Route exact path={routes.home.path} component={Home}/>
+                <Route path={routes.calculator.path} component={Calculator}/>
+                <Route path={routes.recipes.path} component={Recipes}/>
+                <Route path={routes.stash.children.flavours.path} component={StashFlavours}/>
+                <Route path={routes.stash.children.bases.path} component={StashBases}/>
+                <Route path={routes.stash.children.juices.path} component={StashJuices}/>
+              </div>
             </MuiThemeProvider>
           </AppWrapper>
         </JssProvider>

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -11,6 +13,10 @@ import { appConfig } from '../../config/index';
 import AppDrawer from './AppDrawer';
 
 class AppHeader extends Component {
+  static propTypes = {
+    history: PropTypes.object.isRequired,
+  };
+
   state = {
     drawerOpened: false,
     stashOpen: false,
@@ -18,6 +24,11 @@ class AppHeader extends Component {
 
   handleDrawerChange = (drawerOpened) => {
     this.setState({ drawerOpened });
+  };
+
+  handleNavClick = (path) => {
+    this.props.history.push(path);
+    this.handleDrawerChange(false);
   };
 
   render() {
@@ -28,6 +39,7 @@ class AppHeader extends Component {
         <AppDrawer
           drawerOpened={this.state.drawerOpened}
           handleDrawerChange={this.handleDrawerChange}
+          handleNavClick={this.handleNavClick}
           {...props}
         />
 
@@ -50,6 +62,6 @@ class AppHeader extends Component {
   }
 }
 
-export default AppHeader;
+export default withRouter(AppHeader);
 
 

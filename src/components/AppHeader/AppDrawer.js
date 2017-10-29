@@ -19,14 +19,15 @@ import { routes } from '../../config/index';
 const styles = {
   appDrawer: {
     width: 250,
-  }
+  },
 };
 
 class AppDrawer extends Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
     drawerOpened: PropTypes.bool,
-    handleDrawerChange: PropTypes.func,
+    handleDrawerChange: PropTypes.func.isRequired,
+    handleNavClick: PropTypes.func.isRequired,
   };
 
   state = {
@@ -38,21 +39,16 @@ class AppDrawer extends Component {
   };
 
   render() {
-    const props = this.props;
+    const { classes, handleDrawerChange, handleNavClick, drawerOpened } = this.props;
 
     return (
-      <Drawer
-        open={props.drawerOpened}
-        onRequestClose={() => props.handleDrawerChange(false)}
-      >
-        <div className={props.classes.appDrawer}>
+      <Drawer open={drawerOpened}
+        onRequestClose={() => handleDrawerChange(false)}>
+        <div className={classes.appDrawer}>
           <Grid container>
             <Grid item xs={12}>
-
-              <IconButton
-                onClick={() => props.handleDrawerChange(false)}
-                onKeyDown={() => props.handleDrawerChange(false)}
-              >
+              <IconButton onClick={() => handleDrawerChange(false)}
+                onKeyDown={() => handleDrawerChange(false)}>
                 <IconClose />
               </IconButton>
             </Grid>
@@ -61,17 +57,25 @@ class AppDrawer extends Component {
           <Divider default/>
 
           <List component="div">
-            <NavListItem route={routes.home} {...props} />
-            <NavListItem route={routes.recipes} {...props} />
-            <NavListItem route={routes.calculator} {...props} />
-            <ListItem button onClick={() => this.toggleStashMenu(!this.state.stashOpen)}>
-              <ListItemText primary={routes.stash.title} />
+            <NavListItem route={routes.home} handleNavClick={handleNavClick}/>
+            <NavListItem route={routes.recipes}
+              handleNavClick={handleNavClick}/>
+            <NavListItem route={routes.calculator}
+              handleNavClick={handleNavClick}/>
+            <ListItem button
+              onClick={() => this.toggleStashMenu(!this.state.stashOpen)}>
+              <ListItemText primary={routes.stash.title}/>
               {this.state.stashOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={this.state.stashOpen} transitionDuration="auto" unmountOnExit>
-              <NavListItem route={routes.stash.children.flavours} {...props} />
-              <NavListItem route={routes.stash.children.bases} {...props} />
-              <NavListItem route={routes.stash.children.juices} {...props} />
+            <Collapse in={this.state.stashOpen}
+              transitionDuration="auto"
+              unmountOnExit>
+              <NavListItem route={routes.stash.children.flavours}
+                handleNavClick={handleNavClick}/>
+              <NavListItem route={routes.stash.children.bases}
+                handleNavClick={handleNavClick}/>
+              <NavListItem route={routes.stash.children.juices}
+                handleNavClick={handleNavClick}/>
             </Collapse>
           </List>
         </div>

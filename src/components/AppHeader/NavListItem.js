@@ -1,35 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
 
 import { ListItem, ListItemText } from 'material-ui/List';
 
 // A simple component that shows the pathname of the current location
 class NavListItem extends Component {
   static propTypes = {
-    text: PropTypes.string,
-    path: PropTypes.string,
-    match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
-  };
-
-  handleClick = (path) => {
-    this.props.history.push(path);
-    this.props.handleDrawerChange(false);
+    route: PropTypes.object.isRequired,
+    handleNavClick: PropTypes.func.isRequired,
   };
 
   render() {
     const { title, path } = this.props.route;
-    
+    const handleNavClick = this.props.handleNavClick;
+
     return (
-      <ListItem button onClick={() => this.handleClick(path)}>
-        <ListItemText
-          primary={title}
-        />
+      <ListItem button onClick={() => handleNavClick(path)}>
+        <ListItemText primary={title}/>
       </ListItem>
     );
   }
 }
 
-export default withRouter(NavListItem);
+export default NavListItem;
