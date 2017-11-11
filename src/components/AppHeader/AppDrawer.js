@@ -90,7 +90,7 @@ class AppDrawer extends Component {
             </NavListItem>
             <Collapse
               in={this.state.stashOpen}
-              transitionDuration="auto"
+              timeout="auto"
               unmountOnExit>
               <NavListItem
                 route={routes.stash.children.flavours}

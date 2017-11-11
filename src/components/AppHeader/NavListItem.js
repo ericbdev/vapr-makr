@@ -48,7 +48,7 @@ class NavListItem extends Component {
     handleClick: PropTypes.func.isRequired,
     isActive: PropTypes.bool,
     route: PropTypes.object,
-    subnav: PropTypes.object,
+    subnav: PropTypes.bool,
   };
 
   render() {
