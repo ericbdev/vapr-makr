@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import { matchPath, withRouter } from 'react-router-dom';
 
@@ -18,20 +17,13 @@ import NavListItem from './NavListItem';
 
 import { routes } from '../../config/index';
 
-const styles = {
+const styles = theme => ({
   appDrawer: {
     width: 250,
   },
-};
+});
 
 class AppDrawer extends Component {
-  static propTypes = {
-    classes: PropTypes.object.isRequired,
-    drawerOpened: PropTypes.bool,
-    handleDrawerChange: PropTypes.func.isRequired,
-    handleNavClick: PropTypes.func.isRequired,
-  };
-
   state = {
     stashOpen: false,
   };
@@ -118,4 +110,4 @@ class AppDrawer extends Component {
   }
 }
 
-export default withStyles(styles)(withRouter(AppDrawer));
+export default withRouter(withStyles(styles)(AppDrawer));

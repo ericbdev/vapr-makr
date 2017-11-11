@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "classnames": "^2.2.5",
-    "jss": "latest",
-    "jss-preset-default": "latest",
+    "jss": "^8.1.0",
+    "jss-preset-default": "^3.0.0",
     "material-ui": "1.0.0-beta.20",
     "material-ui-icons": "1.0.0-beta.17",
     "node-sass-chokidar": "0.0.3",
@@ -13,11 +13,11 @@
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-jss": "latest",
+    "react-jss": "^7.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.14",
     "react-tap-event-plugin": "^3.0.2",
-    "recompose": "latest",
+    "recompose": "^0.26.0",
     "typeface-roboto": "0.0.41"
   },
   "scripts": {
