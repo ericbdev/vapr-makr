@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { matchPath, withRouter } from 'react-router-dom';
+
 import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
 import Grid from 'material-ui/Grid';
 import IconButton from 'material-ui/IconButton';
 import Collapse from 'material-ui/transitions/Collapse';
 import { withStyles } from 'material-ui/styles';
-import List, { ListItem, ListItemText } from 'material-ui/List';
+import List from 'material-ui/List';
 import { Close as IconClose } from 'material-ui-icons';
 
 import ExpandLess from 'material-ui-icons/ExpandLess';
@@ -38,6 +40,13 @@ class AppDrawer extends Component {
     this.setState({ stashOpen });
   };
 
+  isActive(path) {
+    const currentPath = this.props.location.pathname;
+    const matchInfo = matchPath(path, currentPath);
+
+    return matchInfo ? matchInfo.isExact : false;
+  }
+
   render() {
     const { classes, handleDrawerChange, handleNavClick, drawerOpened } = this.props;
 
@@ -57,25 +66,50 @@ class AppDrawer extends Component {
           <Divider default/>
 
           <List component="div">
-            <NavListItem route={routes.home} handleNavClick={handleNavClick}/>
-            <NavListItem route={routes.recipes}
-              handleNavClick={handleNavClick}/>
-            <NavListItem route={routes.calculator}
-              handleNavClick={handleNavClick}/>
-            <ListItem button
-              onClick={() => this.toggleStashMenu(!this.state.stashOpen)}>
-              <ListItemText primary={routes.stash.title}/>
+            <NavListItem
+              route={routes.home}
+              handleClick={handleNavClick}
+              isActive={this.isActive(routes.home.path)}
+            />
+            <NavListItem 
+              route={routes.recipes}
+              handleClick={handleNavClick}
+              isActive={this.isActive(routes.recipes.path)}
+            />
+            <NavListItem 
+              route={routes.calculator}
+              handleClick={handleNavClick}
+              isActive={this.isActive(routes.calculator.path)}
+            /> 
+            <NavListItem
+              handleClick={() => this.toggleStashMenu(!this.state.stashOpen)}
+              isActive={this.state.stashOpen}
+            >
+              <span>{routes.stash.title}</span>
               {this.state.stashOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={this.state.stashOpen}
+            </NavListItem>
+            <Collapse
+              in={this.state.stashOpen}
               transitionDuration="auto"
               unmountOnExit>
-              <NavListItem route={routes.stash.children.flavours}
-                handleNavClick={handleNavClick}/>
-              <NavListItem route={routes.stash.children.bases}
-                handleNavClick={handleNavClick}/>
-              <NavListItem route={routes.stash.children.juices}
-                handleNavClick={handleNavClick}/>
+              <NavListItem
+                route={routes.stash.children.flavours}
+                handleClick={handleNavClick}
+                isActive={this.isActive(routes.stash.children.flavours.path)}
+                subnav={true}
+              />
+              <NavListItem
+                route={routes.stash.children.bases}
+                handleClick={handleNavClick}
+                isActive={this.isActive(routes.stash.children.bases.path)}
+                subnav={true}
+              />
+              <NavListItem
+                route={routes.stash.children.juices}
+                handleClick={handleNavClick}
+                isActive={this.isActive(routes.stash.children.juices.path)}
+                subnav={true}
+              />
             </Collapse>
           </List>
         </div>
@@ -84,4 +118,4 @@ class AppDrawer extends Component {
   }
 }
 
-export default withStyles(styles)(AppDrawer);
+export default withStyles(styles)(withRouter(AppDrawer));
