@@ -9,29 +9,12 @@ import Table, {
   TablePagination,
   TableRow,
 } from 'material-ui/Table';
-import Paper from 'material-ui/Paper';
 
 import FlavourTableHeader from './FlavourTableHeader'
 
-/*
- TODO: Make root style reusable, to apply consistently from one location
- */
 const styles = theme => ({
-  root: {
-    padding: theme.spacing.unit * 2,
-    marginTop: 56,
-    [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
-      marginTop: 48,
-    },
-    [theme.breakpoints.up('sm')]: {
-      marginTop: 64,
-    },
-  },
   table: {
-    width: 'auto',
-    minWidth: 800,
-    marginRight: 'auto',
-    marginLeft: 'auto',
+    width: '100%',
   },
   tableWrapper: {
     overflowX: 'auto',
@@ -132,44 +115,42 @@ class StashFlavours extends Component {
     const { data, order, orderBy, rowsPerPage, page } = this.state;
 
     return (
-      <Paper className={classes.root}>
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table}>
-            <FlavourTableHeader
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-            />
-              <TableBody>
-              {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
-                return (
-                  <TableRow
-                    hover
-                    tabIndex={-1}
-                    key={n.id}
-                  >
-                    <TableCell padding="none">{n.flavour}</TableCell>
-                    <TableCell>{mapManufacturer(n.manufacturer)}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
+      <div className={classes.tableWrapper}>
+        <Table className={classes.table}>
+          <FlavourTableHeader
+            order={order}
+            orderBy={orderBy}
+            onSelectAllClick={this.handleSelectAllClick}
+            onRequestSort={this.handleRequestSort}
+          />
+            <TableBody>
+            {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
+              return (
+                <TableRow
+                  hover
+                  tabIndex={-1}
+                  key={n.id}
+                >
+                  <TableCell padding="none">{n.flavour}</TableCell>
+                  <TableCell>{mapManufacturer(n.manufacturer)}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
 
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  count={data.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </div>
-      </Paper>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                count={data.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={this.handleChangePage}
+                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
     );
   }
 }

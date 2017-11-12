@@ -1,26 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-
-const styles = theme => ({
-  root: {
-    textAlign: 'center',
-    paddingTop: 200,
-  },
-});
 
 class Home extends Component {
-  static propTypes = {
-    classes: PropTypes.object.isRequired,
-  };
 
   render() {
     return (
-      <div className={this.props.classes.root}>
-        <span className="todo">Home</span>
-      </div>
+      <div style={{ textAlign: 'center' }}>Home</div>
     );
   }
 }
 
-export default withStyles(styles)(Home);
+export default Home;
