@@ -15,11 +15,11 @@ import ExpandLess from 'material-ui-icons/ExpandLess';
 import ExpandMore from 'material-ui-icons/ExpandMore';
 import NavListItem from './NavListItem';
 
-import { routes } from '../../config/index';
+import { routes, styles } from '../../config/index';
 
-const styles = theme => ({
+const appDrawerStyles = theme => ({
   appDrawer: {
-    width: 250,
+    width: styles.layout.appDrawer.width,
   },
 });
 
@@ -110,4 +110,4 @@ class AppDrawer extends Component {
   }
 }
 
-export default withRouter(withStyles(styles)(AppDrawer));
+export default withRouter(withStyles(appDrawerStyles)(AppDrawer));
