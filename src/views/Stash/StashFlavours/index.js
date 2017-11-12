@@ -10,6 +10,7 @@ import Table, {
   TableRow,
 } from 'material-ui/Table';
 
+import { manufacturers } from '../../../utils/';
 import FlavourTableHeader from './FlavourTableHeader'
 
 const styles = theme => ({
@@ -20,22 +21,6 @@ const styles = theme => ({
     overflowX: 'auto',
   },
 });
-
-// TODO: Abstract out
-const manufacturers = {
-  1: 'Capella',
-  2: 'The Perfumers/Flavour Apprentice',
-  3: 'Flavour West',
-};
-
-/**
- * Map a manufacturer id to a string
- * @param id
- * @returns {*}
- */
-function mapManufacturer(id) {
-  return manufacturers[id];
-}
 
 // TODO: Abstract information here once in working prototype
 let counter = 0;
@@ -132,7 +117,7 @@ class StashFlavours extends Component {
                   key={n.id}
                 >
                   <TableCell padding="none">{n.flavour}</TableCell>
-                  <TableCell>{mapManufacturer(n.manufacturer)}</TableCell>
+                  <TableCell>{manufacturers.getManufacturerName(n.manufacturer)}</TableCell>
                 </TableRow>
               );
             })}
