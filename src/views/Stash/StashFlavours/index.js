@@ -5,6 +5,8 @@ import { withStyles } from 'material-ui/styles';
 import Table, {
   TableBody,
   TableCell,
+  TableFooter,
+  TablePagination,
   TableRow,
 } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
@@ -96,6 +98,8 @@ class StashFlavours extends Component {
       order: 'asc',
       orderBy: 'flavour',
       data: flavours,
+      page: 0,
+      rowsPerPage: 10,
     };
   }
 
@@ -115,9 +119,17 @@ class StashFlavours extends Component {
     this.setState({ data, order, orderBy });
   };
 
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  };
+
+  handleChangeRowsPerPage = event => {
+    this.setState({ rowsPerPage: event.target.value });
+  };
+
   render() {
     const { classes } = this.props;
-    const { data, order, orderBy } = this.state;
+    const { data, order, orderBy, rowsPerPage, page } = this.state;
 
     return (
       <Paper className={classes.root}>
@@ -130,11 +142,10 @@ class StashFlavours extends Component {
               onRequestSort={this.handleRequestSort}
             />
               <TableBody>
-              {data.map(n => {
+              {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
                 return (
                   <TableRow
                     hover
-                    role="checkbox"
                     tabIndex={-1}
                     key={n.id}
                   >
@@ -144,6 +155,18 @@ class StashFlavours extends Component {
                 );
               })}
             </TableBody>
+
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  count={data.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </div>
       </Paper>
