@@ -9,17 +9,20 @@ import Table, {
   TablePagination,
   TableRow,
 } from 'material-ui/Table';
+import Divider from 'material-ui/Divider';
 
 import { manufacturers } from '../../../utils/';
 import FlavourTableHeader from './FlavourTableHeader'
+import AddFlavourForm from './AddFlavourForm'
 
 const styles = theme => ({
   table: {
     width: '100%',
   },
   tableWrapper: {
+    marginTop: theme.spacing.unit * 2,
     overflowX: 'auto',
-  },
+  }
 });
 
 // TODO: Abstract information here once in working prototype
@@ -100,41 +103,47 @@ class StashFlavours extends Component {
     const { data, order, orderBy, rowsPerPage, page } = this.state;
 
     return (
-      <div className={classes.tableWrapper}>
-        <Table className={classes.table}>
-          <FlavourTableHeader
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={this.handleSelectAllClick}
-            onRequestSort={this.handleRequestSort}
-          />
-            <TableBody>
-            {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
-              return (
-                <TableRow
-                  hover
-                  tabIndex={-1}
-                  key={n.id}
-                >
-                  <TableCell padding="none">{n.flavour}</TableCell>
-                  <TableCell>{manufacturers.getManufacturerName(n.manufacturer)}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
+      <div>
+        <AddFlavourForm />
 
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                count={data.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={this.handleChangePage}
-                onChangeRowsPerPage={this.handleChangeRowsPerPage}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
+        <Divider/>
+
+        <div className={classes.tableWrapper}>
+          <Table className={classes.table}>
+            <FlavourTableHeader
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={this.handleRequestSort}
+            />
+
+            <TableBody>
+              {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
+                return (
+                  <TableRow
+                    hover
+                    tabIndex={-1}
+                    key={n.id}
+                  >
+                    <TableCell padding="none">{n.flavour}</TableCell>
+                    <TableCell>{manufacturers.getManufacturerName(n.manufacturer)}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  count={data.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                />
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </div>
       </div>
     );
   }
