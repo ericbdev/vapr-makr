@@ -85,9 +85,9 @@ class AppDrawer extends Component {
               timeout="auto"
               unmountOnExit>
               <NavListItem
-                route={routes.stash.children.flavours}
+                route={routes.stash.children.flavors}
                 handleClick={handleNavClick}
-                isActive={this.isActive(routes.stash.children.flavours.path)}
+                isActive={this.isActive(routes.stash.children.flavors.path)}
                 subnav={true}
               />
               <NavListItem

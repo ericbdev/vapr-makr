@@ -13,7 +13,7 @@ import Home from './containers/Home/index';
 import Calculator from './containers/Calculator/index';
 import Recipes from './containers/Recipes/index';
 import StashBases from './containers/StashBases/index';
-import StashFlavours from './containers/StashFlavours/index';
+import StashFlavors from './containers/StashFlavors/index';
 import StashJuices from './containers/StashJuices/index';
 
 // Apply some reset
@@ -59,7 +59,7 @@ class Root extends Component {
                   <Route exact path={routes.home.path} component={Home}/>
                   <Route path={routes.calculator.path} component={Calculator}/>
                   <Route path={routes.recipes.path} component={Recipes}/>
-                  <Route path={routes.stash.children.flavours.path} component={StashFlavours}/>
+                  <Route path={routes.stash.children.flavors.path} component={StashFlavors}/>
                   <Route path={routes.stash.children.bases.path} component={StashBases}/>
                   <Route path={routes.stash.children.juices.path} component={StashJuices}/>
                 </AppPage>

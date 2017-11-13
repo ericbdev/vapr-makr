@@ -7,12 +7,12 @@ const manufacturerList = [
   {
     id: 2,
     shortName: 'TPA',
-    longName: 'The Perfumers/Flavour Apprentice',
+    longName: 'The Perfumers/Flavor Apprentice',
   },
   {
     id: 3,
     shortName: 'FW',
-    longName: 'Flavour West',
+    longName: 'Flavor West',
   },
 ];
 

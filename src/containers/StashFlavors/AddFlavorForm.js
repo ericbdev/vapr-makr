@@ -31,15 +31,15 @@ const styles = theme => ({
   },
 });
 
-class AddFlavourForm extends Component {
+class AddFlavorForm extends Component {
   static propTypes = {};
 
   constructor(props, context) {
     super(props, context);
 
     this.state = {
-      flavourManufacturer: '',
-      flavourName: '',
+      flavorManufacturer: '',
+      flavorName: '',
     };
   }
 
@@ -50,8 +50,8 @@ class AddFlavourForm extends Component {
   };
 
   handleSubmit = () => {
-    const {flavourManufacturer, flavourName} = this.state;
-    console.log({flavourManufacturer, flavourName})
+    const {flavorManufacturer, flavorName} = this.state;
+    console.log({flavorManufacturer, flavorName})
   };
 
   render() {
@@ -60,32 +60,32 @@ class AddFlavourForm extends Component {
     return (
       <Paper className={classes.root}>
         <Typography type="title" gutterBottom>
-          Add a flavour
+          Add a flavor
         </Typography>
 
         {/* TODO: https://material-ui-next.com/demos/autocomplete/ */}
         <form className={classes.formContainer} noValidate autoComplete="off">
-          <TextField label="Flavour name"
+          <TextField label="Flavor name"
             className={classes.textField}
-            name="flavour_name"
+            name="flavor_name"
             InputLabelProps={{
               shrink: true,
             }}
             margin="normal"
             required
-            onChange={this.handleChange('flavourName')}
+            onChange={this.handleChange('flavorName')}
           />
           <TextField select
             label="Manufacturer"
-            name="flavour_manufacturer"
+            name="flavor_manufacturer"
             className={classes.textField}
-            value={this.state.flavourManufacturer}
+            value={this.state.flavorManufacturer}
             InputLabelProps={{
               shrink: true,
             }}
             margin="normal"
             required
-            onChange={this.handleChange('flavourManufacturer')}
+            onChange={this.handleChange('flavorManufacturer')}
           >
             {manufacturers.manufacturerList.map(manufacturer => (
               <MenuItem key={manufacturer.id} value={manufacturer.id}>
@@ -99,7 +99,7 @@ class AddFlavourForm extends Component {
             className={classes.button}
             onClick={this.handleSubmit}
           >
-            Add Flavour
+            Add Flavor
           </Button>
         </form>
       </Paper>
@@ -107,4 +107,4 @@ class AddFlavourForm extends Component {
   }
 }
 
-export default withStyles(styles)(AddFlavourForm);
+export default withStyles(styles)(AddFlavorForm);
