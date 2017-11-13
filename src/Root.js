@@ -9,12 +9,12 @@ import AppHeader from './components/AppHeader/index';
 import AppPage from './components/AppPage/index';
 
 // Views
-import Home from './containers/Home/index';
-import Calculator from './containers/Calculator/index';
-import Recipes from './containers/Recipes/index';
-import StashBases from './containers/StashBases/index';
-import StashFlavors from './containers/StashFlavors/index';
-import StashJuices from './containers/StashJuices/index';
+import Home from './containers/Home';
+import Calculator from './containers/Calculator';
+import Recipes from './containers/Recipes';
+import StashBases from './containers/StashBases';
+import StashFlavors from './containers/StashFlavors';
+import StashJuices from './containers/StashJuices';
 
 // Apply some reset
 const styles = theme => ({
