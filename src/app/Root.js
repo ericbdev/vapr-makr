@@ -6,6 +6,7 @@ import createContext from '../config/styles/createContext';
 import { routes } from '../config/index';
 
 import AppHeader from '../components/AppHeader';
+import AppPage from '../components/AppPage';
 
 // Views
 import Home from '../views/Home';
@@ -54,12 +55,14 @@ class Root extends Component {
             <MuiThemeProvider theme={context.theme} sheetsManager={context.sheetsManager}>
               <div>
                 <AppHeader {...props} />
-                <Route exact path={routes.home.path} component={Home}/>
-                <Route path={routes.calculator.path} component={Calculator}/>
-                <Route path={routes.recipes.path} component={Recipes}/>
-                <Route path={routes.stash.children.flavours.path} component={StashFlavours}/>
-                <Route path={routes.stash.children.bases.path} component={StashBases}/>
-                <Route path={routes.stash.children.juices.path} component={StashJuices}/>
+                <AppPage>
+                  <Route exact path={routes.home.path} component={Home}/>
+                  <Route path={routes.calculator.path} component={Calculator}/>
+                  <Route path={routes.recipes.path} component={Recipes}/>
+                  <Route path={routes.stash.children.flavours.path} component={StashFlavours}/>
+                  <Route path={routes.stash.children.bases.path} component={StashBases}/>
+                  <Route path={routes.stash.children.juices.path} component={StashJuices}/>
+                </AppPage>
               </div>
             </MuiThemeProvider>
           </AppWrapper>
