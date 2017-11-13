@@ -8,7 +8,7 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Typography from 'material-ui/Typography';
 
-import { manufacturers } from '../../../utils/';
+import { manufacturers } from '../../utils';
 
 const styles = theme => ({
   root: {

@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { withStyles, MuiThemeProvider } from 'material-ui/styles';
-import createContext from '../config/styles/createContext';
-import { routes } from '../config/index';
+import createContext from './config/styles/createContext';
+import { routes } from './config/index';
 
-import AppHeader from '../components/AppHeader';
-import AppPage from '../components/AppPage';
+import AppHeader from './components/AppHeader/index';
+import AppPage from './components/AppPage/index';
 
 // Views
-import Home from '../views/Home';
-import Calculator from '../views/Calculator';
-import Recipes from '../views/Recipes';
-import StashBases from '../views/Stash/StashBases';
-import StashFlavours from '../views/Stash/StashFlavours';
-import StashJuices from '../views/Stash/StashJuices';
+import Home from './containers/Home/index';
+import Calculator from './containers/Calculator/index';
+import Recipes from './containers/Recipes/index';
+import StashBases from './containers/StashBases/index';
+import StashFlavours from './containers/StashFlavours/index';
+import StashJuices from './containers/StashJuices/index';
 
 // Apply some reset
 const styles = theme => ({

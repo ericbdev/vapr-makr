@@ -11,7 +11,7 @@ import Table, {
 } from 'material-ui/Table';
 import Divider from 'material-ui/Divider';
 
-import { manufacturers } from '../../../utils/';
+import { manufacturers } from '../../utils';
 import FlavourTableHeader from './FlavourTableHeader'
 import AddFlavourForm from './AddFlavourForm'
 
