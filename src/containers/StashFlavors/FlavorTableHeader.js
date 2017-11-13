@@ -9,11 +9,11 @@ import {
 } from 'material-ui/Table';
 
 const columnData = [
-  { id: 'flavour', disablePadding: true, label: 'Flavour' },
+  { id: 'flavor', disablePadding: true, label: 'Flavor' },
   { id: 'manufacturer', disablePadding: false, label: 'Manufacturer' },
 ];
 
-class FlavourTableHeader extends Component {
+class FlavorTableHeader extends Component {
   static propTypes = {
     onRequestSort: PropTypes.func.isRequired,
     order: PropTypes.string.isRequired,
@@ -53,4 +53,4 @@ class FlavourTableHeader extends Component {
   }
 }
 
-export default FlavourTableHeader;
+export default FlavorTableHeader;

@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { withStyles, MuiThemeProvider } from 'material-ui/styles';
-import createContext from '../config/styles/createContext';
-import { routes } from '../config/index';
+import createContext from './config/styles/createContext';
+import { routes } from './config/index';
 
-import AppHeader from '../components/AppHeader';
-import AppPage from '../components/AppPage';
+import AppHeader from './components/AppHeader/index';
+import AppPage from './components/AppPage/index';
 
 // Views
-import Home from '../views/Home';
-import Calculator from '../views/Calculator';
-import Recipes from '../views/Recipes';
-import StashBases from '../views/Stash/StashBases';
-import StashFlavours from '../views/Stash/StashFlavours';
-import StashJuices from '../views/Stash/StashJuices';
+import Home from './containers/Home';
+import Calculator from './containers/Calculator';
+import Recipes from './containers/Recipes';
+import StashBases from './containers/StashBases';
+import StashFlavors from './containers/StashFlavors';
+import StashJuices from './containers/StashJuices';
 
 // Apply some reset
 const styles = theme => ({
@@ -59,7 +59,7 @@ class Root extends Component {
                   <Route exact path={routes.home.path} component={Home}/>
                   <Route path={routes.calculator.path} component={Calculator}/>
                   <Route path={routes.recipes.path} component={Recipes}/>
-                  <Route path={routes.stash.children.flavours.path} component={StashFlavours}/>
+                  <Route path={routes.stash.children.flavors.path} component={StashFlavors}/>
                   <Route path={routes.stash.children.bases.path} component={StashBases}/>
                   <Route path={routes.stash.children.juices.path} component={StashJuices}/>
                 </AppPage>

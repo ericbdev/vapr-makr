@@ -14,9 +14,9 @@ const routes = {
   stash: {
     title: 'Stash',
     children: {
-      flavours: {
-        title: 'Flavours',
-        path: '/stash/flavours',
+      flavors: {
+        title: 'Flavors',
+        path: '/stash/flavors',
       },
       bases: {
         title: 'Bases',

@@ -11,9 +11,9 @@ import Table, {
 } from 'material-ui/Table';
 import Divider from 'material-ui/Divider';
 
-import { manufacturers } from '../../../utils/';
-import FlavourTableHeader from './FlavourTableHeader'
-import AddFlavourForm from './AddFlavourForm'
+import { manufacturers } from '../../utils';
+import FlavorTableHeader from './FlavorTableHeader'
+import AddFlavorForm from './AddFlavorForm'
 
 const styles = theme => ({
   table: {
@@ -27,12 +27,12 @@ const styles = theme => ({
 
 // TODO: Abstract information here once in working prototype
 let counter = 0;
-function createData(flavour, manufacturer) {
+function createData(flavor, manufacturer) {
   counter += 1;
-  return { id: counter, flavour, manufacturer };
+  return { id: counter, flavor, manufacturer };
 }
 
-const flavours = [
+const flavors = [
   createData('Acai Berry', 2),
   createData('Apple Pie', 1),
   createData('Bavarian Cream', 1),
@@ -57,7 +57,7 @@ const flavours = [
   createData('Vanilla Swirl', 2)
 ];
 
-class StashFlavours extends Component {
+class StashFlavors extends Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
   };
@@ -67,8 +67,8 @@ class StashFlavours extends Component {
 
     this.state = {
       order: 'asc',
-      orderBy: 'flavour',
-      data: flavours,
+      orderBy: 'flavor',
+      data: flavors,
       page: 0,
       rowsPerPage: 10,
     };
@@ -104,13 +104,13 @@ class StashFlavours extends Component {
 
     return (
       <div>
-        <AddFlavourForm />
+        <AddFlavorForm />
 
         <Divider/>
 
         <div className={classes.tableWrapper}>
           <Table className={classes.table}>
-            <FlavourTableHeader
+            <FlavorTableHeader
               order={order}
               orderBy={orderBy}
               onRequestSort={this.handleRequestSort}
@@ -124,7 +124,7 @@ class StashFlavours extends Component {
                     tabIndex={-1}
                     key={n.id}
                   >
-                    <TableCell padding="none">{n.flavour}</TableCell>
+                    <TableCell padding="none">{n.flavor}</TableCell>
                     <TableCell>{manufacturers.getManufacturerName(n.manufacturer)}</TableCell>
                   </TableRow>
                 );
@@ -149,4 +149,4 @@ class StashFlavours extends Component {
   }
 }
 
-export default withStyles(styles)(StashFlavours);
+export default withStyles(styles)(StashFlavors);
