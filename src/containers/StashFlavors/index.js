@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { withStyles } from 'material-ui/styles';
 
 import Table, {
@@ -7,13 +9,15 @@ import Table, {
   TableCell,
   TableFooter,
   TablePagination,
-  TableRow,
+  TableRow
 } from 'material-ui/Table';
 import Divider from 'material-ui/Divider';
 
-import { manufacturers } from '../../utils';
-import FlavorTableHeader from './FlavorTableHeader'
-import AddFlavorForm from './AddFlavorForm'
+import { getFlavours, manufacturers } from '../../utils';
+import FlavorTableHeader from './FlavorTableHeader';
+import AddFlavorForm from './AddFlavorForm';
+
+import { addFlavor } from './actions';
 
 const styles = theme => ({
   table: {
@@ -24,38 +28,6 @@ const styles = theme => ({
     overflowX: 'auto',
   }
 });
-
-// TODO: Abstract information here once in working prototype
-let counter = 0;
-function createData(flavor, manufacturer) {
-  counter += 1;
-  return { id: counter, flavor, manufacturer };
-}
-
-const flavors = [
-  createData('Acai Berry', 2),
-  createData('Apple Pie', 1),
-  createData('Bavarian Cream', 1),
-  createData('Berry (Crunch) Cereal', 2),
-  createData('Cake Batter Dip', 3),
-  createData('Cheesecake', 2),
-  createData('Crunchy (Captain) Cereal', 2),
-  createData('DX Peanut Butter', 2),
-  createData('DX Sweet Cream', 2),
-  createData('French Vanilla II', 2),
-  createData('Fruit Circles', 2),
-  createData('Fruit Circles with Milk', 2),
-  createData('Glazed Doughnut', 1),
-  createData('Golden Butter', 1),
-  createData('Graham Cracker v2', 1),
-  createData('Lemon', 2),
-  createData('Lemon Meringue Pie v2', 1),
-  createData('Marshmallow', 3),
-  createData('Strawberries and Cream', 2),
-  createData('Strawberry (Ripe)', 2),
-  createData('Vanilla Custard v2', 1),
-  createData('Vanilla Swirl', 2)
-];
 
 class StashFlavors extends Component {
   static propTypes = {
@@ -68,7 +40,6 @@ class StashFlavors extends Component {
     this.state = {
       order: 'asc',
       orderBy: 'flavor',
-      data: flavors,
       page: 0,
       rowsPerPage: 10,
     };
@@ -99,12 +70,16 @@ class StashFlavors extends Component {
   };
 
   render() {
-    const { classes } = this.props;
-    const { data, order, orderBy, rowsPerPage, page } = this.state;
+    const { classes, handleFlavorSubmit, flavors } = this.props;
+    const { order, orderBy, rowsPerPage, page } = this.state;
+    const pagination = {
+      start: (page * rowsPerPage),
+      end: (page * rowsPerPage) + rowsPerPage,
+    };
 
     return (
       <div>
-        <AddFlavorForm />
+        <AddFlavorForm onFlavourSubmit={handleFlavorSubmit} />
 
         <Divider/>
 
@@ -117,24 +92,22 @@ class StashFlavors extends Component {
             />
 
             <TableBody>
-              {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
-                return (
-                  <TableRow
-                    hover
-                    tabIndex={-1}
-                    key={n.id}
-                  >
-                    <TableCell padding="none">{n.flavor}</TableCell>
-                    <TableCell>{manufacturers.getManufacturerName(n.manufacturer)}</TableCell>
-                  </TableRow>
-                );
-              })}
+              {
+                flavors.slice(pagination.start, pagination.end).map(n => {
+                  return (
+                    <TableRow hover tabIndex={-1} key={n.id}>
+                      <TableCell padding="none">{n.flavor}</TableCell>
+                      <TableCell>{manufacturers.getManufacturerName(n.manufacturer)}</TableCell>
+                    </TableRow>
+                  );
+                })
+              }
             </TableBody>
 
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  count={data.length}
+                  count={flavors.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onChangePage={this.handleChangePage}
@@ -149,4 +122,21 @@ class StashFlavors extends Component {
   }
 }
 
-export default withStyles(styles)(StashFlavors);
+const mapStateToProps = (state, ownProps) => {
+  return {
+    flavors: getFlavours()
+  }
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    handleFlavorSubmit: data => dispatch(addFlavor(data))
+  }
+};
+
+export default compose(
+  withStyles(styles, {
+    name: 'StashFlavors',
+  }),
+  connect(mapStateToProps, mapDispatchToProps),
+)(StashFlavors);
