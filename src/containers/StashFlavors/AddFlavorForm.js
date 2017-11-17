@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 
 import Button from 'material-ui/Button';
@@ -32,7 +32,9 @@ const styles = theme => ({
 });
 
 class AddFlavorForm extends Component {
-  static propTypes = {};
+  static propTypes = {
+    onFlavourSubmit: PropTypes.func.isRequired
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -51,7 +53,7 @@ class AddFlavorForm extends Component {
 
   handleSubmit = () => {
     const {flavorManufacturer, flavorName} = this.state;
-    console.log({flavorManufacturer, flavorName})
+    this.props.onFlavourSubmit({flavorManufacturer, flavorName});
   };
 
   render() {
