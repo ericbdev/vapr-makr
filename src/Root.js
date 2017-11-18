@@ -4,6 +4,7 @@ import { ConnectedRouter } from 'react-router-redux'
 import { Provider } from 'react-redux'
 import JssProvider from 'react-jss/lib/JssProvider';
 import { withStyles, MuiThemeProvider } from 'material-ui/styles';
+import 'typeface-roboto';
 import createContext from './config/styles/createContext';
 import { history, routes, store } from './config/index';
 
@@ -28,6 +29,8 @@ const styles = theme => ({
     },
     body: {
       margin: 0,
+      padding: 0,
+      fontFamily: '\'Roboto\', sans-serif',
     },
   },
 });
