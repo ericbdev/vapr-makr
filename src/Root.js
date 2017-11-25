@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux'
-import { Provider } from 'react-redux'
+import { ConnectedRouter } from 'react-router-redux';
+import { Provider } from 'react-redux';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { withStyles, MuiThemeProvider } from 'material-ui/styles';
 import 'typeface-roboto';
 import createContext from './config/styles/createContext';
 import { history, routes, store } from './config/index';
+import apolloClient from './apolloClient';
 
+// Apollo
+import { ApolloProvider } from 'react-apollo';
+
+// Layouts
 import AppHeader from './components/AppHeader/index';
 import AppPage from './components/AppPage/index';
 
@@ -54,27 +59,29 @@ class Root extends Component {
     const props = this.props;
 
     return (
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <JssProvider registry={context.sheetsRegistry} jss={context.jss}>
-            <AppWrapper>
-              <MuiThemeProvider theme={context.theme} sheetsManager={context.sheetsManager}>
-                <div>
-                  <AppHeader {...props} />
-                  <AppPage>
-                    <Route exact path={routes.home.path} component={Home}/>
-                    <Route path={routes.calculator.path} component={Calculator}/>
-                    <Route path={routes.recipes.path} component={Recipes}/>
-                    <Route path={routes.stash.children.flavors.path} component={StashFlavors}/>
-                    <Route path={routes.stash.children.bases.path} component={StashBases}/>
-                    <Route path={routes.stash.children.juices.path} component={StashJuices}/>
-                  </AppPage>
-                </div>
-              </MuiThemeProvider>
-            </AppWrapper>
-          </JssProvider>
-        </ConnectedRouter>
-      </Provider>
+      <ApolloProvider client={apolloClient}>
+        <Provider store={store}>
+          <ConnectedRouter history={history}>
+            <JssProvider registry={context.sheetsRegistry} jss={context.jss}>
+              <AppWrapper>
+                <MuiThemeProvider theme={context.theme} sheetsManager={context.sheetsManager}>
+                  <div>
+                    <AppHeader {...props} />
+                    <AppPage>
+                      <Route exact path={routes.home.path} component={Home}/>
+                      <Route path={routes.calculator.path} component={Calculator}/>
+                      <Route path={routes.recipes.path} component={Recipes}/>
+                      <Route path={routes.stash.children.flavors.path} component={StashFlavors}/>
+                      <Route path={routes.stash.children.bases.path} component={StashBases}/>
+                      <Route path={routes.stash.children.juices.path} component={StashJuices}/>
+                    </AppPage>
+                  </div>
+                </MuiThemeProvider>
+              </AppWrapper>
+            </JssProvider>
+          </ConnectedRouter>
+        </Provider>
+      </ApolloProvider>
     );
   }
 }
