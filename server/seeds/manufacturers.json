@@ -1,0 +1,17 @@
+[
+  {
+    "manufacturerId": 1,
+    "shortName": "CAP",
+    "longName": "Capella"
+  },
+  {
+    "manufacturerId": 2,
+    "shortName": "TPA",
+    "longName": "The Perfumers/Flavor Apprentice"
+  },
+  {
+    "manufacturerId": 3,
+    "shortName": "FW",
+    "longName": "Flavor West"
+  }
+]

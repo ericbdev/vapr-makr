@@ -92,6 +92,8 @@ class FlavorTable extends Component {
     
     const flavors = data.allFlavors;
 
+    console.log(data);
+
     if (data.loading) {
       return (
         <Loading />
