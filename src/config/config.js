@@ -1,5 +1,5 @@
 const appConfig = {
-  appName: 'VaprMakr',
+  appName: process.env.REACT_APP_NAME,
 };
 
 export default appConfig;

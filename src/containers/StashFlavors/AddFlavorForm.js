@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
+import { graphql, compose } from 'react-apollo';
+import gql from 'graphql-tag';
 
+import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import MenuItem from 'material-ui/Menu/MenuItem';
 import Paper from 'material-ui/Paper';
@@ -9,6 +11,20 @@ import TextField from 'material-ui/TextField';
 import Typography from 'material-ui/Typography';
 
 import { manufacturers } from '../../utils';
+
+const addFlavorMutation = gql`
+  mutation addFlavor($name: String!, $manufacturerId: Int!) {
+    addFlavor(name: $name, manufacturerId:$manufacturerId) {
+      id
+      name
+      manufacturer {
+        id
+        longName
+        shortName
+      }
+    }
+  }
+`;
 
 const styles = theme => ({
   root: {
@@ -53,10 +69,20 @@ class AddFlavorForm extends Component {
 
   handleSubmit = () => {
     const {flavorManufacturer, flavorName} = this.state;
-    this.props.onFlavourSubmit({flavorManufacturer, flavorName});
+    this.props.mutate({
+      variables: {
+        name: flavorName,
+        manufacturerId: flavorManufacturer,
+      }
+    });
+    
+    //TODO: Deal with mutation when succesful!
+
+    //this.props.onFlavourSubmit({flavorManufacturer, flavorName});
   };
 
   render() {
+    console.log(this.props);
     const { classes } = this.props;
 
     return (
@@ -109,4 +135,9 @@ class AddFlavorForm extends Component {
   }
 }
 
-export default withStyles(styles)(AddFlavorForm);
+export default compose(
+  withStyles(styles, {
+    name: 'AddFlavorForm',
+  }),
+  graphql(addFlavorMutation),
+)(AddFlavorForm);
