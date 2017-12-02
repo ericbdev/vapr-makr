@@ -9,7 +9,7 @@ import {
 } from 'material-ui/Table';
 
 const columnData = [
-  { id: 'flavor', disablePadding: true, label: 'Flavor' },
+  { id: 'name', disablePadding: true, label: 'Flavor' },
   { id: 'manufacturer', disablePadding: false, label: 'Manufacturer' },
 ];
 
