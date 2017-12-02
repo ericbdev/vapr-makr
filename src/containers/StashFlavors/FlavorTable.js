@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import { graphql, compose } from 'react-apollo';
-import gql from 'graphql-tag';
 
 import Table, {
   TableBody,
@@ -15,8 +13,7 @@ import Table, {
 
 import Loading from '../../components/Loading';
 import FlavorTableHeader from './FlavorTableHeader';
-
-import { addFlavor } from './actions';
+import { queries } from '../../gql';
 
 const styles = theme => ({
   table: {
@@ -28,20 +25,6 @@ const styles = theme => ({
   }
 });
 
-const flavorListQuery = gql`
-  query FlavorListQuery {
-    allFlavors {
-      id
-      name,
-      manufacturer {
-        id
-        shortName
-        longName
-      }
-    }
-  }
- `;
-
 class FlavorTable extends Component {
   static propTypes = {
     classes: PropTypes.object,
@@ -51,11 +34,33 @@ class FlavorTable extends Component {
     super(props, context);
 
     this.state = {
-      order: 'asc',
-      orderBy: 'flavor',
+      order: 'desc',
+      orderBy: 'name',
       page: 0,
       rowsPerPage: 10,
+      sortedFlavors: null,
     };
+  }
+
+  sortFlavors(flavors) {
+    const orderBy = this.state.orderBy;
+    const order = this.state.order;
+    let sortable = [].concat(flavors);
+
+    if (orderBy === 'name') {
+      return order === 'asc'
+        ? sortable.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
+        : sortable.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
+    }
+
+    //TODO: When sorting by manufacturer, sort flavor names too...
+    if (orderBy === 'manufacturer') {
+     return order === 'asc'
+        ? sortable.sort((a, b) => (b[orderBy].longName < a[orderBy].longName ? -1 : 1))
+        : sortable.sort((a, b) => (a[orderBy].longName < b[orderBy].longName ? -1 : 1));
+    }
+
+    return sortable;
   }
 
   handleRequestSort = (event, property) => {
@@ -66,12 +71,7 @@ class FlavorTable extends Component {
       order = 'asc';
     }
 
-    const data =
-      order === 'desc'
-        ? this.state.data.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
-        : this.state.data.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
-
-    this.setState({ data, order, orderBy });
+    this.setState({ order, orderBy });
   };
 
   handleChangePage = (event, page) => {
@@ -89,14 +89,14 @@ class FlavorTable extends Component {
       start: (page * rowsPerPage),
       end: (page * rowsPerPage) + rowsPerPage,
     };
-    
-    const flavors = data.allFlavors;
 
     if (data.loading) {
       return (
         <Loading />
       );
     }
+
+    const flavors = this.sortFlavors(data.allFlavors);
 
     return (
       <div className={classes.tableWrapper}>
@@ -112,7 +112,11 @@ class FlavorTable extends Component {
             {
               flavors.slice(pagination.start, pagination.end).map(flavor => {
                 return (
-                  <TableRow hover tabIndex={-1} key={flavor.id}>
+                  <TableRow
+                    hover
+                    tabIndex={-1}
+                    key={flavor.id}
+                  >
                     <TableCell padding="none">{flavor.name}</TableCell>
                     <TableCell>{flavor.manufacturer.longName}</TableCell>
                   </TableRow>
@@ -138,20 +142,9 @@ class FlavorTable extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {}
-};
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    handleFlavorSubmit: data => dispatch(addFlavor(data))
-  }
-};
-
 export default compose(
   withStyles(styles, {
     name: 'FlavorTable',
   }),
-  connect(mapStateToProps, mapDispatchToProps),
-  graphql(flavorListQuery),
+  graphql(queries.flavorListQuery),
 )(FlavorTable);

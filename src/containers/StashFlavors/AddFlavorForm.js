@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
-import gql from 'graphql-tag';
+import { connect } from 'react-redux';
 
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
@@ -10,21 +10,10 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Typography from 'material-ui/Typography';
 
-import { manufacturers } from '../../utils';
+import { showNotification, hideNotification } from '../../components/Notification/actions';
 
-const addFlavorMutation = gql`
-  mutation addFlavor($name: String!, $manufacturerId: Int!) {
-    addFlavor(name: $name, manufacturerId:$manufacturerId) {
-      id
-      name
-      manufacturer {
-        id
-        longName
-        shortName
-      }
-    }
-  }
-`;
+import { manufacturers } from '../../utils';
+import { queries, mutations } from '../../gql';
 
 const styles = theme => ({
   root: {
@@ -68,21 +57,65 @@ class AddFlavorForm extends Component {
   };
 
   handleSubmit = () => {
-    const {flavorManufacturer, flavorName} = this.state;
+    const { flavorManufacturer, flavorName } = this.state;
+
+    if (flavorManufacturer === '' || flavorName === '') {
+      // TODO: Error message
+      return;
+    }
+
+    /*
+    TODO: Add in optimistic response
+      optimisticResponse: {
+        addFlavor: {
+          __typename: 'Flavor',
+          name: flavorName,
+          id: Math.round(Math.random() * -1000000),
+          manufacturer: {
+            __typename: 'Manufacturer',
+            id: Math.round(Math.random() * -1000000),
+            shortName: '',
+            longName: '',
+            manufacturerId: flavorManufacturer,
+          }
+        },
+      },
+    */
+
+    this.props.dispatch(hideNotification());
+
     this.props.mutate({
       variables: {
-        name: flavorName,
-        manufacturerId: flavorManufacturer,
-      }
-    });
-    
-    //TODO: Deal with mutation when succesful!
+        flavor: {
+          name: flavorName,
+          manufacturerId: flavorManufacturer,
+        }
+      },
+      update: (store, { data: { addFlavor } }) => {
+        // Read the data from the cache for this query.
+        const data = store.readQuery({ query: queries.flavorListQuery });
+        // Add our channel from the mutation to the end.
+        data.allFlavors.push(addFlavor);
+        // Write the data back to the cache.
+        store.writeQuery({
+          query: queries.flavorListQuery,
+          data,
+        });
 
-    //this.props.onFlavourSubmit({flavorManufacturer, flavorName});
+        const message = `Added: ${addFlavor.name} (${addFlavor.manufacturer.shortName})`;
+
+        this.props.dispatch(showNotification({message}));
+      },
+      //refetchQueries: [{ query: queries.flavorListQuery }],
+    }).then( () => {
+      this.setState({
+        flavorName: '',
+        flavorManufacturer: '',
+      });
+    });
   };
 
   render() {
-    console.log(this.props);
     const { classes } = this.props;
 
     return (
@@ -93,9 +126,11 @@ class AddFlavorForm extends Component {
 
         {/* TODO: https://material-ui-next.com/demos/autocomplete/ */}
         <form className={classes.formContainer} noValidate autoComplete="off">
-          <TextField label="Flavor name"
+          <TextField
+            label="Flavor name"
             className={classes.textField}
-            name="flavor_name"
+            name="flavorName"
+            value={this.state.flavorName}
             InputLabelProps={{
               shrink: true,
             }}
@@ -103,9 +138,10 @@ class AddFlavorForm extends Component {
             required
             onChange={this.handleChange('flavorName')}
           />
-          <TextField select
+          <TextField
+            select
             label="Manufacturer"
-            name="flavor_manufacturer"
+            name="flavorManufacturer"
             className={classes.textField}
             value={this.state.flavorManufacturer}
             InputLabelProps={{
@@ -136,8 +172,11 @@ class AddFlavorForm extends Component {
 }
 
 export default compose(
+  connect(),
   withStyles(styles, {
     name: 'AddFlavorForm',
   }),
-  graphql(addFlavorMutation),
+  graphql(mutations.addFlavorMutation, {
+    options: { pollInterval: 5000 },
+  }),
 )(AddFlavorForm);
