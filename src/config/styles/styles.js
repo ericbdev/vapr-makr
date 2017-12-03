@@ -1,11 +1,20 @@
+import { common } from 'material-ui/colors';
+
 const layout = {
   appDrawer: {
     width: 250,
   },
 };
 
-const styles = {
-  layout,
+const colors = {
+  fullWhite: common.fullWhite,
+  darkBlack: common.darkBlack,
+  lightBlack: common.lightBlack,
 };
 
-export default styles;
+const themeStyles = {
+  layout,
+  colors,
+};
+
+export default themeStyles;

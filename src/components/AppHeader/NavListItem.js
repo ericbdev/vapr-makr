@@ -2,17 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import { common as commonColors } from 'material-ui/colors';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import { ListItem } from 'material-ui/List';
+
+import { themeStyles } from '../../config/index';
 
 //TODO: Map spacings/sizings
 const styles = theme => ({
   navButton: theme.mixins.gutters({
     justifyContent: 'flex-start',
     width: '100%',
-    color: commonColors.lightBlack,
+    color: themeStyles.colors.lightBlack,
     fontSize: '18px',
     textTransform: 'none',
     borderRadius: 0,
@@ -24,15 +25,15 @@ const styles = theme => ({
     },
   }),
   activeButton: {
-    color: commonColors.darkBlack,
+    color: themeStyles.colors.darkBlack,
+  },
+  subNavButtonText: {
+    paddingLeft: '14px',
   },
   navItem: {
     display: 'block',
     paddingTop: 0,
     paddingBottom: 0,
-  },
-  subNavItem: {
-    paddingLeft: '14px',
   },
   navLink: {
     display: 'flex',
@@ -61,19 +62,18 @@ class NavListItem extends Component {
       subnav
     } = this.props;
 
-    const navClass = subnav
-      ? classNames(classes.navItem, classes.subNavItem)
-      : classes.navItem;
     const buttonClass = isActive
       ? classNames(classes.navButton, classes.activeButton)
       : classes.navButton;
+
+    const buttonTextClass = subnav ? classes.subNavButtonText: null ;
 
     if (route) {
       const { title, path } = route;
 
       return (
         <ListItem
-          className={navClass}
+          className={classes.navItem}
           disableGutters
           onClick={() => handleClick(path)}
         >
@@ -82,7 +82,11 @@ class NavListItem extends Component {
             disableRipple
             className={buttonClass}
           >
-            {title}
+            <span
+              className={buttonTextClass}
+            >
+              {title}
+            </span>
           </Button>
         </ListItem>
       );
@@ -90,7 +94,7 @@ class NavListItem extends Component {
 
     return (
       <ListItem
-        className={navClass}
+        className={classes.navItem}
         disableGutters
         onClick={handleClick}
       >

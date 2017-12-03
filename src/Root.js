@@ -6,7 +6,7 @@ import JssProvider from 'react-jss/lib/JssProvider';
 import { withStyles, MuiThemeProvider } from 'material-ui/styles';
 import 'typeface-roboto';
 import createContext from './config/styles/createContext';
-import { history, routes, store } from './config/index';
+import { history, routes, store, themeStyles } from './config/index';
 import apolloClient from './apolloClient';
 
 // Apollo
@@ -28,13 +28,13 @@ import StashJuices from './containers/StashJuices';
 const styles = theme => ({
   '@global': {
     html: {
-      background: theme.palette.background.default,
       WebkitFontSmoothing: 'antialiased', // Antialiasing.
       MozOsxFontSmoothing: 'grayscale', // Antialiasing.
     },
     body: {
       margin: 0,
       padding: 0,
+      background: themeStyles.colors.fullWhite,
       fontFamily: '\'Roboto\', sans-serif',
     },
   },

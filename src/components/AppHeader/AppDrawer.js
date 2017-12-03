@@ -15,11 +15,11 @@ import ExpandLess from 'material-ui-icons/ExpandLess';
 import ExpandMore from 'material-ui-icons/ExpandMore';
 import NavListItem from './NavListItem';
 
-import { routes, styles } from '../../config/index';
+import { routes, themeStyles } from '../../config/index';
 
 const appDrawerStyles = theme => ({
   appDrawer: {
-    width: styles.layout.appDrawer.width,
+    width: themeStyles.layout.appDrawer.width,
   },
 });
 
@@ -48,8 +48,10 @@ class AppDrawer extends Component {
         <div className={classes.appDrawer}>
           <Grid container>
             <Grid item xs={12}>
-              <IconButton onClick={() => handleDrawerChange(false)}
-                onKeyDown={() => handleDrawerChange(false)}>
+              <IconButton
+                onClick={() => handleDrawerChange(false)}
+                onKeyUp={(event) => handleDrawerChange(false, event)}
+              >
                 <IconClose />
               </IconButton>
             </Grid>
@@ -57,7 +59,7 @@ class AppDrawer extends Component {
 
           <Divider default/>
 
-          <List component="div">
+          <List>
             <NavListItem
               route={routes.home}
               handleClick={handleNavClick}
@@ -84,24 +86,26 @@ class AppDrawer extends Component {
               in={this.state.stashOpen}
               timeout="auto"
               unmountOnExit>
-              <NavListItem
-                route={routes.stash.children.flavors}
-                handleClick={handleNavClick}
-                isActive={this.isActive(routes.stash.children.flavors.path)}
-                subnav={true}
-              />
-              <NavListItem
-                route={routes.stash.children.bases}
-                handleClick={handleNavClick}
-                isActive={this.isActive(routes.stash.children.bases.path)}
-                subnav={true}
-              />
-              <NavListItem
-                route={routes.stash.children.juices}
-                handleClick={handleNavClick}
-                isActive={this.isActive(routes.stash.children.juices.path)}
-                subnav={true}
-              />
+              <List disablePadding>
+                <NavListItem
+                  route={routes.stash.children.flavors}
+                  handleClick={handleNavClick}
+                  isActive={this.isActive(routes.stash.children.flavors.path)}
+                  subnav={true}
+                />
+                <NavListItem
+                  route={routes.stash.children.bases}
+                  handleClick={handleNavClick}
+                  isActive={this.isActive(routes.stash.children.bases.path)}
+                  subnav={true}
+                />
+                <NavListItem
+                  route={routes.stash.children.juices}
+                  handleClick={handleNavClick}
+                  isActive={this.isActive(routes.stash.children.juices.path)}
+                  subnav={true}
+                />
+              </List>
             </Collapse>
           </List>
         </div>
