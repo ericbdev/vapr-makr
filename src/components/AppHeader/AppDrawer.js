@@ -59,7 +59,7 @@ class AppDrawer extends Component {
 
           <Divider default/>
 
-          <List component="div">
+          <List>
             <NavListItem
               route={routes.home}
               handleClick={handleNavClick}
@@ -86,24 +86,26 @@ class AppDrawer extends Component {
               in={this.state.stashOpen}
               timeout="auto"
               unmountOnExit>
-              <NavListItem
-                route={routes.stash.children.flavors}
-                handleClick={handleNavClick}
-                isActive={this.isActive(routes.stash.children.flavors.path)}
-                subnav={true}
-              />
-              <NavListItem
-                route={routes.stash.children.bases}
-                handleClick={handleNavClick}
-                isActive={this.isActive(routes.stash.children.bases.path)}
-                subnav={true}
-              />
-              <NavListItem
-                route={routes.stash.children.juices}
-                handleClick={handleNavClick}
-                isActive={this.isActive(routes.stash.children.juices.path)}
-                subnav={true}
-              />
+              <List disablePadding>
+                <NavListItem
+                  route={routes.stash.children.flavors}
+                  handleClick={handleNavClick}
+                  isActive={this.isActive(routes.stash.children.flavors.path)}
+                  subnav={true}
+                />
+                <NavListItem
+                  route={routes.stash.children.bases}
+                  handleClick={handleNavClick}
+                  isActive={this.isActive(routes.stash.children.bases.path)}
+                  subnav={true}
+                />
+                <NavListItem
+                  route={routes.stash.children.juices}
+                  handleClick={handleNavClick}
+                  isActive={this.isActive(routes.stash.children.juices.path)}
+                  subnav={true}
+                />
+              </List>
             </Collapse>
           </List>
         </div>

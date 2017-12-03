@@ -27,13 +27,13 @@ const styles = theme => ({
   activeButton: {
     color: themeStyles.colors.darkBlack,
   },
+  subNavButtonText: {
+    paddingLeft: '14px',
+  },
   navItem: {
     display: 'block',
     paddingTop: 0,
     paddingBottom: 0,
-  },
-  subNavItem: {
-    paddingLeft: '14px',
   },
   navLink: {
     display: 'flex',
@@ -62,19 +62,18 @@ class NavListItem extends Component {
       subnav
     } = this.props;
 
-    const navClass = subnav
-      ? classNames(classes.navItem, classes.subNavItem)
-      : classes.navItem;
     const buttonClass = isActive
       ? classNames(classes.navButton, classes.activeButton)
       : classes.navButton;
+
+    const buttonTextClass = subnav ? classes.subNavButtonText: null ;
 
     if (route) {
       const { title, path } = route;
 
       return (
         <ListItem
-          className={navClass}
+          className={classes.navItem}
           disableGutters
           onClick={() => handleClick(path)}
         >
@@ -83,7 +82,11 @@ class NavListItem extends Component {
             disableRipple
             className={buttonClass}
           >
-            {title}
+            <span
+              className={buttonTextClass}
+            >
+              {title}
+            </span>
           </Button>
         </ListItem>
       );
@@ -91,7 +94,7 @@ class NavListItem extends Component {
 
     return (
       <ListItem
-        className={navClass}
+        className={classes.navItem}
         disableGutters
         onClick={handleClick}
       >
