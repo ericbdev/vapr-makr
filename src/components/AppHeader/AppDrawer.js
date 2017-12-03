@@ -48,8 +48,10 @@ class AppDrawer extends Component {
         <div className={classes.appDrawer}>
           <Grid container>
             <Grid item xs={12}>
-              <IconButton onClick={() => handleDrawerChange(false)}
-                onKeyDown={() => handleDrawerChange(false)}>
+              <IconButton
+                onClick={() => handleDrawerChange(false)}
+                onKeyUp={(event) => handleDrawerChange(false, event)}
+              >
                 <IconClose />
               </IconButton>
             </Grid>

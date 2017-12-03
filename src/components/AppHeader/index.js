@@ -22,7 +22,12 @@ class AppHeader extends Component {
     stashOpen: false,
   };
 
-  handleDrawerChange = (drawerOpened) => {
+  handleDrawerChange = (drawerOpened, event = null) => {
+    // If key is not enter, return
+    if (event && event.key !== 13) {
+      return;
+    }
+
     this.setState({ drawerOpened });
   };
 
@@ -47,7 +52,7 @@ class AppHeader extends Component {
           <Toolbar disableGutters>
             <IconButton
               onClick={() => this.handleDrawerChange(true)}
-              onKeyDown={() => this.handleDrawerChange(true)}
+              onKeyUp={(event) => this.handleDrawerChange(true, event)}
               color="inherit"
             >
               <IconMenu />
