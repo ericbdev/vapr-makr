@@ -28,13 +28,13 @@ import StashJuices from './containers/StashJuices';
 const styles = theme => ({
   '@global': {
     html: {
-      background: theme.palette.background.default,
       WebkitFontSmoothing: 'antialiased', // Antialiasing.
       MozOsxFontSmoothing: 'grayscale', // Antialiasing.
     },
     body: {
       margin: 0,
       padding: 0,
+      background: theme.palette.background.default,
       fontFamily: '\'Roboto\', sans-serif',
     },
   },

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from 'material-ui/styles';
-import Paper from 'material-ui/Paper';
 import Notification from '../Notification';
 
 const styles = theme => ({
@@ -35,13 +34,13 @@ class AppPage extends Component {
     const { children, classes } = this.props;
 
     return (
-      <Paper className={classes.root}>
+      <div className={classes.root}>
         <div className={classes.pageContent}>
           {children}
         </div>
 
         <Notification />
-      </Paper>
+      </div>
     );
   }
 }
