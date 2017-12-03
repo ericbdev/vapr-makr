@@ -1,6 +1,6 @@
 import appConfig from './config';
 import routes from './routes';
-import styles from './styles/styles';
+import themeStyles from './styles/styles';
 import { history, store } from './store';
 
 export {
@@ -8,5 +8,5 @@ export {
   history,
   routes,
   store,
-  styles,
+  themeStyles,
 };

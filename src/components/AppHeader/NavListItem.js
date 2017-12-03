@@ -2,17 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import { common as commonColors } from 'material-ui/colors';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import { ListItem } from 'material-ui/List';
+
+import { themeStyles } from '../../config/index';
 
 //TODO: Map spacings/sizings
 const styles = theme => ({
   navButton: theme.mixins.gutters({
     justifyContent: 'flex-start',
     width: '100%',
-    color: commonColors.lightBlack,
+    color: themeStyles.colors.lightBlack,
     fontSize: '18px',
     textTransform: 'none',
     borderRadius: 0,
@@ -24,7 +25,7 @@ const styles = theme => ({
     },
   }),
   activeButton: {
-    color: commonColors.darkBlack,
+    color: themeStyles.colors.darkBlack,
   },
   navItem: {
     display: 'block',

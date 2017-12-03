@@ -15,11 +15,11 @@ import ExpandLess from 'material-ui-icons/ExpandLess';
 import ExpandMore from 'material-ui-icons/ExpandMore';
 import NavListItem from './NavListItem';
 
-import { routes, styles } from '../../config/index';
+import { routes, themeStyles } from '../../config/index';
 
 const appDrawerStyles = theme => ({
   appDrawer: {
-    width: styles.layout.appDrawer.width,
+    width: themeStyles.layout.appDrawer.width,
   },
 });
 
