@@ -9,7 +9,20 @@ const routes = {
   },
   recipes: {
     title: 'Recipes',
-    path: '/recipes',
+    children: {
+      add: {
+        title: 'Add recipe',
+        path: '/recipes/flavors',
+      },
+      all: {
+        title: 'All recipes',
+        path: '/recipes/bases',
+      },
+      view: {
+        title: 'View recipes',
+        path: '/recipes/view/:id',
+      },
+    },
   },
   stash: {
     title: 'Stash',

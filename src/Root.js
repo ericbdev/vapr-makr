@@ -70,7 +70,8 @@ class Root extends Component {
                     <AppPage>
                       <Route exact path={routes.home.path} component={Home}/>
                       <Route path={routes.calculator.path} component={Calculator}/>
-                      <Route path={routes.recipes.path} component={Recipes}/>
+                      <Route path={routes.recipes.children.add.path} component={Recipes}/>
+                      <Route path={routes.recipes.children.all.path} component={Recipes}/>
                       <Route path={routes.stash.children.flavors.path} component={StashFlavors}/>
                       <Route path={routes.stash.children.bases.path} component={StashBases}/>
                       <Route path={routes.stash.children.juices.path} component={StashJuices}/>

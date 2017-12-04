@@ -1,45 +1,41 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import classNames from "classnames";
 
-import { withStyles } from 'material-ui/styles';
-import Button from 'material-ui/Button';
-import { ListItem } from 'material-ui/List';
+import { withStyles } from "material-ui/styles";
+import { ListItem, ListItemText } from "material-ui/List";
 
-import { themeStyles } from '../../config/index';
+import { themeStyles } from "../../config/index";
 
 //TODO: Map spacings/sizings
 const styles = theme => ({
-  navButton: theme.mixins.gutters({
+  navItem: {
+    transition: theme.transitions.create('background-color', {
+      duration: theme.transitions.duration.standard,
+    }),
+    '&:hover': {
+      backgroundColor: theme.palette.text.lightDivider,
+    }
+  },
+  navButton: {
     justifyContent: 'flex-start',
     width: '100%',
     color: themeStyles.colors.lightBlack,
-    fontSize: '18px',
+    fontFamily: theme.typography.fontFamily,
+    fontWeight: theme.typography.fontWeightRegular,
+    fontSize: theme.typography.pxToRem(theme.typography.fontSize),
     textTransform: 'none',
     borderRadius: 0,
-    transition: theme.transitions.create('background-color', {
-      duration: theme.transitions.duration.shortest,
-    }),
-    '&:hover': {
+    "&:hover": {
       textDecoration: 'none',
     },
-  }),
+  },
   activeButton: {
     color: themeStyles.colors.darkBlack,
   },
-  subNavButtonText: {
+  childButton: {
     paddingLeft: '14px',
-  },
-  navItem: {
-    display: 'block',
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
-  navLink: {
-    display: 'flex',
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
+  }
 });
 
 class NavListItem extends Component {
@@ -49,62 +45,37 @@ class NavListItem extends Component {
     handleClick: PropTypes.func.isRequired,
     isActive: PropTypes.bool,
     route: PropTypes.object,
-    subnav: PropTypes.bool,
+    isChild: PropTypes.bool,
   };
 
   render() {
-    const { 
-      children, 
-      classes, 
-      handleClick, 
-      isActive,
-      route,
-      subnav
-    } = this.props;
+    const { classes, handleClick, isChild, isActive, route } = this.props;
 
-    const buttonClass = isActive
-      ? classNames(classes.navButton, classes.activeButton)
-      : classes.navButton;
+    let buttonClass = classes.navButton;
 
-    const buttonTextClass = subnav ? classes.subNavButtonText: null ;
-
-    if (route) {
-      const { title, path } = route;
-
-      return (
-        <ListItem
-          className={classes.navItem}
-          disableGutters
-          onClick={() => handleClick(path)}
-        >
-          <Button
-            variant="button"
-            disableRipple
-            className={buttonClass}
-          >
-            <span
-              className={buttonTextClass}
-            >
-              {title}
-            </span>
-          </Button>
-        </ListItem>
-      );
+    if (isActive) {
+      buttonClass = classNames(buttonClass, classes.activeButton);
     }
+
+    if (isChild) {
+      buttonClass = classNames(buttonClass, classes.childButton);
+    }
+
+    const { title, path } = route;
+    const primary = <span className={buttonClass}>{title}</span>;
 
     return (
       <ListItem
+        button
+        disableRipple
         className={classes.navItem}
-        disableGutters
-        onClick={handleClick}
+        onClick={() => handleClick(path)}
       >
-        <Button
-          variant="button"
-          disableRipple
-          className={buttonClass}
-        >
-          {children}
-        </Button>
+        <ListItemText
+          primary={primary}
+          disableTypography={true}
+          inset={false}
+        />
       </ListItem>
     );
   }
