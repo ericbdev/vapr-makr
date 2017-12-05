@@ -4,7 +4,9 @@ class Calculator extends Component {
 
   render() {
     return (
-      <div style={{ textAlign: 'center' }}>Calculator</div>
+      <div style={{ textAlign: 'center' }}>
+        Calculator
+      </div>
     );
   }
 }
