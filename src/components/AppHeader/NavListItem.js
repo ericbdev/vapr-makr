@@ -51,6 +51,7 @@ class NavListItem extends Component {
   render() {
     const { classes, handleClick, isChild, isActive, route } = this.props;
 
+    // TODO: Convert to Array
     let buttonClass = classes.navButton;
 
     if (isActive) {
