@@ -28,6 +28,7 @@ const styles = theme => ({
 class FlavorTable extends Component {
   static propTypes = {
     classes: PropTypes.object,
+    data: PropTypes.object,
   };
 
   constructor(props, context) {

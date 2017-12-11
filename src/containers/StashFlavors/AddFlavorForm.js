@@ -125,6 +125,7 @@ class AddFlavorForm extends Component {
         </Typography>
 
         {/* TODO: https://material-ui-next.com/demos/autocomplete/ */}
+        {/* TODO: https://codesandbox.io/s/0pr832y47w */}
         <form className={classes.formContainer} noValidate autoComplete="off">
           <TextField
             label="Flavor name"
