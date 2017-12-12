@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { List, Map } from 'immutable';
+import { getIn, List, Map } from 'immutable';
 import { graphql, compose } from 'react-apollo';
 
 import { withStyles } from 'material-ui/styles';
@@ -16,37 +16,6 @@ import Loading from '../../components/Loading';
 import { queries } from '../../gql';
 import FlavorItem from './FlavorItem';
 
-/*
-  Recipe name
-  Steep time
-    - range slider
-
-  ---
-
-  amount to make [ml]
-    - masked field
-  desired nicotine strength [mg]
-    - masked field
-  PG [%]
-    - masked field
-  VG [%]    - [√]max vg 
-    - masked field
-    - Add button to side which sets 100% VG
-
-  ---
-
-  Nicotine strength [mg]
-  Nicotine VG [%]
-  Nicotine PG [%]
-
-  ---
-
-  Flavors
-  - Flavor = [%]
-  - is pg / is vg / other
-*/
-
-//TODO: When editing, use two column display at LG
 const styles = theme => ({
   root: {
     width: '100%',
@@ -83,41 +52,46 @@ class RecipesAdd extends Component {
     super(props);
 
     this.state = {
-      data: Map({
-        recipeName: '',
+      recipe: Map({
+        name: '',
         ingredients: Map({
-          end: {
+          end: Map({
             amount: 0,
-            nicStrength: 0,
-            pgRatio: 0,
-            vgRatio: 0,
-          },
-          nicotine: {
             strength: 0,
-            type: 'vg',
-          },
+            pgRatio: 25,
+            vgRatio: 75,
+          }),
+          nicotine: Map({
+            strength: 0,
+            pgRatio: 25,
+            vgRatio: 75,
+          }),
           flavors: List([
             this.createFlavor(0),
           ]),
         }),
       }),
     };
-
-    this.handleFlavorChange = this.handleFlavorChange.bind(this);
   }
 
   getAdornment(string) {
     return (<InputAdornment position="end">{string}</InputAdornment>);
   }
-  
+
+  applyChange(setTarget, value) {
+    this.setState({
+      recipe: this.state.recipe.setIn(setTarget, value)
+    });
+  }
+
   setFlavorList(newFlavors) {
     this.setState({
-      data: this.state.data.setIn(['ingredients', 'flavors'], newFlavors)
+      recipe: this.state.recipe.setIn(['ingredients', 'flavors'], newFlavors)
     })
   }
 
   getFlavorList() {
-    return this.state.data.get('ingredients').get('flavors');
+    return getIn(this.state.recipe, ['ingredients', 'flavors']);
   }
 
   createFlavor(key) {
@@ -134,7 +108,7 @@ class RecipesAdd extends Component {
     return this.createFlavor(newKey);
   }
 
-  handleFlavorChange(flavorItem) {
+  handleFlavorChange = (flavorItem) => {
     const { amount, flavor, key } = flavorItem;
 
     const initialFlavor = this.getFlavorList()
@@ -145,11 +119,43 @@ class RecipesAdd extends Component {
 
     const newFlavors = this.getFlavorList().set(key, newFlavor);
     this.setFlavorList(newFlavors);
-  }
+  };
 
   handleAdditionalFlavor() {
     const newFlavors = this.getFlavorList().push(this.createEmptyFlavor());
     this.setFlavorList(newFlavors);
+  }
+
+  handleChange = (target) => (event) => {
+    const setTarget = [].concat(target);
+
+    this.applyChange(setTarget, event.target.value);
+  };
+
+  handleEndRatio = (event) => {
+    const max = 100;
+    const min = 0;
+    const field = event.target.name;
+    // Sanitize value. Must be a number, bust be between 0 and 100
+    const valueBase = parseInt(event.target.value, 10);
+    const value = isNaN(valueBase) ? 0 : Math.min(Math.max(valueBase, min), max );
+    const altField = (field === 'vgRatio' ? 'pgRatio' : 'vgRatio');
+    const altValue = max - value;
+
+    const endValues = this.getIngredient('end')
+        .update(field, () => value)
+        .update(altField, () => altValue);
+
+    this.applyChange(['ingredients', 'end'], endValues);
+  };
+
+  getIngredient(keyA, keyB = null) {
+    let keyPath = ['ingredients', keyA];
+    if (keyB) {
+      keyPath.push(keyB);
+    }
+
+    return getIn(this.state.recipe, keyPath, null);
   }
 
   render() {
@@ -175,6 +181,9 @@ class RecipesAdd extends Component {
               <Grid item xs={12}>
                 <TextField
                   label="Recipe name"
+                  name="name"
+                  value={this.state.recipe.get('name')}
+                  onChange={this.handleChange(['name'])}
                   className={classes.textField}
                   InputLabelProps={{
                     shrink: true,
@@ -196,6 +205,9 @@ class RecipesAdd extends Component {
               <Grid item xs={6} md={3}>
                 <TextField
                   label="Amount to make"
+                  name="amount"
+                  value={this.getIngredient('end', 'amount')}
+                  onChange={this.handleChange(['ingredients', 'end', 'amount'])}
                   className={classes.textField}
                   InputProps = {{
                     endAdornment: this.getAdornment('ml'),
@@ -210,7 +222,10 @@ class RecipesAdd extends Component {
 
               <Grid item xs={6} md={3}>
                 <TextField
-                  label="Nicotine strength"
+                  label="Desired strength"
+                  name="strength"
+                  value={this.getIngredient('end', 'strength')}
+                  onChange={this.handleChange(['ingredients', 'end', 'strength'])}
                   className={classes.textField}
                   InputProps = {{
                     endAdornment: this.getAdornment('mg'),
@@ -225,11 +240,16 @@ class RecipesAdd extends Component {
 
               <Grid item xs={6} md={3}>
                 <TextField
-                  label="VG"
+                  label="VG Level"
+                  name="vgRatio"
+                  value={this.getIngredient('end', 'vgRatio')}
+                  onChange={this.handleEndRatio}
                   className={classes.textField}
                   InputProps = {{
                     endAdornment: this.getAdornment('%'),
                     type: 'number',
+                    max: 100,
+                    min: 0,
                   }}
                   InputLabelProps={{
                     shrink: true,
@@ -240,11 +260,16 @@ class RecipesAdd extends Component {
 
               <Grid item xs={6} md={3}>
                 <TextField
-                  label="PG"
+                  label="PG Level"
+                  name="pgRatio"
+                  value={this.getIngredient('end', 'pgRatio')}
+                  onChange={this.handleEndRatio}
                   className={classes.textField}
                   InputProps = {{
                     endAdornment: this.getAdornment('%'),
                     type: 'number',
+                    max: 100,
+                    min: 0,
                   }}
                   InputLabelProps={{
                     shrink: true,
@@ -263,8 +288,54 @@ class RecipesAdd extends Component {
                 </Typography>
               </Grid>
 
-              <Grid item xs={12}>
-                Stength + PG / VG / Other
+              <Grid item xs={12} md={4}>
+                <TextField
+                  label="Nicotine strength"
+                  value={this.getIngredient('nicotine', 'strength')}
+                  onChange={this.handleChange(['ingredients', 'nicotine', 'strength'])}
+                  className={classes.textField}
+                  InputProps = {{
+                    endAdornment: this.getAdornment('mg'),
+                    type: 'number',
+                  }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  margin="normal"
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Grid container>
+                  <Grid item xs={6} md={4}>
+                    <TextField
+                      label="VG content"
+                      className={classes.textField}
+                      InputProps = {{
+                        endAdornment: this.getAdornment('%'),
+                        type: 'number',
+                      }}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      margin="normal"
+                    />
+                  </Grid>
+                  <Grid item xs={6} md={4}>
+                    <TextField
+                      label="PG content"
+                      className={classes.textField}
+                      InputProps = {{
+                        endAdornment: this.getAdornment('%'),
+                        type: 'number',
+                      }}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      margin="normal"
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
 
