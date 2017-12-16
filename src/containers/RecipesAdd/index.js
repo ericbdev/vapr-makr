@@ -55,7 +55,7 @@ class RecipesAdd extends Component {
       recipe: Map({
         name: '',
         ingredients: Map({
-          end: Map({
+          result: Map({
             amount: 0,
             strength: 0,
             pgRatio: 25,
@@ -63,8 +63,8 @@ class RecipesAdd extends Component {
           }),
           nicotine: Map({
             strength: 0,
-            pgRatio: 25,
-            vgRatio: 75,
+            pgRatio: 0,
+            vgRatio: 100,
           }),
           flavors: List([
             this.createFlavor(0),
@@ -126,35 +126,32 @@ class RecipesAdd extends Component {
     this.setFlavorList(newFlavors);
   }
 
-  handleChange = (target) => (event) => {
-    const setTarget = [].concat(target);
+  handleChange = (path, isIngredient = true) => (event) => {
+    const basePath = [].concat(path);
+    const keyPath = isIngredient ? basePath.unshift('ingredients') : basePath;
 
-    this.applyChange(setTarget, event.target.value);
+    this.applyChange(keyPath, event.target.value);
   };
 
-  handleEndRatio = (event) => {
+  handleVGRatio = (prefix) => (event) => {
     const max = 100;
     const min = 0;
-    const field = event.target.name;
+    const field = event.target.name.replace(`${prefix}_`, '');
     // Sanitize value. Must be a number, bust be between 0 and 100
     const valueBase = parseInt(event.target.value, 10);
     const value = isNaN(valueBase) ? 0 : Math.min(Math.max(valueBase, min), max );
     const altField = (field === 'vgRatio' ? 'pgRatio' : 'vgRatio');
     const altValue = max - value;
 
-    const endValues = this.getIngredient('end')
+    const alternateValues = this.getIngredient(prefix)
         .update(field, () => value)
         .update(altField, () => altValue);
 
-    this.applyChange(['ingredients', 'end'], endValues);
+    this.applyChange(['ingredients', prefix], alternateValues);
   };
 
-  getIngredient(keyA, keyB = null) {
-    let keyPath = ['ingredients', keyA];
-    if (keyB) {
-      keyPath.push(keyB);
-    }
-
+  getIngredient(path = []) {
+    const keyPath = [].concat(['ingredients'], path);
     return getIn(this.state.recipe, keyPath, null);
   }
 
@@ -198,7 +195,7 @@ class RecipesAdd extends Component {
             <Grid container>
               <Grid item xs={12}>
                 <Typography type="subheading" gutterBottom>
-                  End product
+                  Resulting product
                 </Typography>
               </Grid>
 
@@ -206,8 +203,8 @@ class RecipesAdd extends Component {
                 <TextField
                   label="Amount to make"
                   name="amount"
-                  value={this.getIngredient('end', 'amount')}
-                  onChange={this.handleChange(['ingredients', 'end', 'amount'])}
+                  value={this.getIngredient(['result', 'amount'])}
+                  onChange={this.handleChange(['result', 'amount'])}
                   className={classes.textField}
                   InputProps = {{
                     endAdornment: this.getAdornment('ml'),
@@ -224,8 +221,8 @@ class RecipesAdd extends Component {
                 <TextField
                   label="Desired strength"
                   name="strength"
-                  value={this.getIngredient('end', 'strength')}
-                  onChange={this.handleChange(['ingredients', 'end', 'strength'])}
+                  value={this.getIngredient(['result', 'strength'])}
+                  onChange={this.handleChange(['result', 'strength'])}
                   className={classes.textField}
                   InputProps = {{
                     endAdornment: this.getAdornment('mg'),
@@ -240,10 +237,10 @@ class RecipesAdd extends Component {
 
               <Grid item xs={6} md={3}>
                 <TextField
-                  label="VG Level"
-                  name="vgRatio"
-                  value={this.getIngredient('end', 'vgRatio')}
-                  onChange={this.handleEndRatio}
+                  label="VG Ratio"
+                  name="result_vgRatio"
+                  value={this.getIngredient(['result', 'vgRatio'])}
+                  onChange={this.handleVGRatio('result')}
                   className={classes.textField}
                   InputProps = {{
                     endAdornment: this.getAdornment('%'),
@@ -260,10 +257,10 @@ class RecipesAdd extends Component {
 
               <Grid item xs={6} md={3}>
                 <TextField
-                  label="PG Level"
-                  name="pgRatio"
-                  value={this.getIngredient('end', 'pgRatio')}
-                  onChange={this.handleEndRatio}
+                  label="PG Ratio"
+                  name="result_pgRatio"
+                  value={this.getIngredient(['result', 'pgRatio'])}
+                  onChange={this.handleVGRatio('result')}
                   className={classes.textField}
                   InputProps = {{
                     endAdornment: this.getAdornment('%'),
@@ -291,8 +288,8 @@ class RecipesAdd extends Component {
               <Grid item xs={12} md={4}>
                 <TextField
                   label="Nicotine strength"
-                  value={this.getIngredient('nicotine', 'strength')}
-                  onChange={this.handleChange(['ingredients', 'nicotine', 'strength'])}
+                  value={this.getIngredient(['nicotine', 'strength'])}
+                  onChange={this.handleChange(['nicotine', 'strength'])}
                   className={classes.textField}
                   InputProps = {{
                     endAdornment: this.getAdornment('mg'),
@@ -310,6 +307,9 @@ class RecipesAdd extends Component {
                   <Grid item xs={6} md={4}>
                     <TextField
                       label="VG content"
+                      name="nicotine_vgRatio"
+                      value={this.getIngredient(['nicotine', 'vgRatio'])}
+                      onChange={this.handleVGRatio('nicotine')}
                       className={classes.textField}
                       InputProps = {{
                         endAdornment: this.getAdornment('%'),
@@ -324,6 +324,9 @@ class RecipesAdd extends Component {
                   <Grid item xs={6} md={4}>
                     <TextField
                       label="PG content"
+                      name="nicotine_pgRatio"
+                      value={this.getIngredient(['nicotine', 'pgRatio'])}
+                      onChange={this.handleVGRatio('nicotine')}
                       className={classes.textField}
                       InputProps = {{
                         endAdornment: this.getAdornment('%'),
