@@ -4,7 +4,6 @@ import { getIn, List, Map } from 'immutable';
 import { graphql, compose } from 'react-apollo';
 
 import { withStyles } from 'material-ui/styles';
-import Button from 'material-ui/Button';
 import Divider from 'material-ui/Divider';
 import TextField from 'material-ui/TextField';
 import Grid from 'material-ui/Grid';
@@ -24,7 +23,7 @@ const styles = theme => ({
     marginLeft: 'auto',
   },
   paper: {
-    padding: [theme.spacing.unit, theme.spacing.unit * 2],
+    padding: [theme.spacing.unit, theme.spacing.unit * 2, theme.spacing.unit * 2],
   },
   textField: {
     flexGrow: 1,
@@ -67,7 +66,7 @@ class RecipesAdd extends Component {
             vgRatio: 100,
           }),
           flavors: List([
-            this.createFlavor(0),
+            this.createFlavor(),
           ]),
         }),
       }),
@@ -84,51 +83,58 @@ class RecipesAdd extends Component {
     });
   }
 
-  setFlavorList(newFlavors) {
-    this.setState({
-      recipe: this.state.recipe.setIn(['ingredients', 'flavors'], newFlavors)
-    })
-  }
-
   getFlavorList() {
     return getIn(this.state.recipe, ['ingredients', 'flavors']);
   }
 
-  createFlavor(key) {
+  createFlavor(flavor = '', amount = 0) {
     return Map({
-      amount: 0,
-      flavor: '',
-      key
+      amount,
+      flavor
     });
-  }
-  
-  createEmptyFlavor() {
-    const newKey = this.getFlavorList().last().get('key') + 1;
-
-    return this.createFlavor(newKey);
   }
 
   handleFlavorChange = (flavorItem) => {
-    const { amount, flavor, key } = flavorItem;
+    const { amount, flavor, index } = flavorItem;
 
-    const initialFlavor = this.getFlavorList()
-      .find((item) => item.get('key') === key);
+    const initialFlavor = this.getFlavorList().get(index);
+    const isLast = this.getFlavorList().size === index + 1;
+    const isEmpty = amount === 0;
+    const shouldAdd = (flavor || !isEmpty) && isLast;
+    const shouldDelete = !flavor && isEmpty && !isLast;
+
     const newFlavor = initialFlavor
       .update('amount', () => amount)
       .update('flavor', () => flavor);
 
-    const newFlavors = this.getFlavorList().set(key, newFlavor);
-    this.setFlavorList(newFlavors);
+    const newList = this.modifyFlavorList({
+      flavorList: this.getFlavorList().set(index, newFlavor),
+      index,
+      shouldAdd,
+      shouldDelete,
+    });
+
+    this.applyChange(['ingredients', 'flavors'], newList)
   };
 
-  handleAdditionalFlavor() {
-    const newFlavors = this.getFlavorList().push(this.createEmptyFlavor());
-    this.setFlavorList(newFlavors);
+  modifyFlavorList(options) {
+    const {index, flavorList, shouldAdd, shouldDelete} = options;
+    if (shouldAdd && !shouldDelete) {
+      // Should it add an empty flavor
+      return flavorList.push(this.createFlavor());
+    } else if(shouldDelete) {
+      // Should it remove the current flavor
+      return flavorList.delete(index);
+    } else {
+      return flavorList;
+    }
   }
 
   handleChange = (path, isIngredient = true) => (event) => {
-    const basePath = [].concat(path);
-    const keyPath = isIngredient ? basePath.unshift('ingredients') : basePath;
+    const keyPath = [].concat(path);
+    if (isIngredient) {
+      keyPath.unshift('ingredients');
+    }
 
     this.applyChange(keyPath, event.target.value);
   };
@@ -180,7 +186,7 @@ class RecipesAdd extends Component {
                   label="Recipe name"
                   name="name"
                   value={this.state.recipe.get('name')}
-                  onChange={this.handleChange(['name'])}
+                  onChange={this.handleChange(['name'], false)}
                   className={classes.textField}
                   InputLabelProps={{
                     shrink: true,
@@ -350,11 +356,11 @@ class RecipesAdd extends Component {
                   Flavors
                 </Typography>
               </Grid>
-
               {
-                this.getFlavorList().map((flavor) => (
+                this.getFlavorList().map((flavor, index) => (
                   <FlavorItem
-                    key={flavor.get('key')}
+                    key={index}
+                    index={index}
                     allFlavors={allFlavors}
                     flavorItem={flavor}
                     className={classes.textField}
@@ -363,12 +369,6 @@ class RecipesAdd extends Component {
                   />
                 ))
               }
-
-              <Grid item xs={12}>
-                <Button raised onClick={() => this.handleAdditionalFlavor()}>
-                  Add Flavor
-                </Button>
-              </Grid>
             </Grid>
           </Paper>
         </form>

@@ -30,28 +30,55 @@ class FlavorItem extends Component {
     this.state = {
       amount: 0,
       flavor: '',
-      key: 0,
+      index: 0,
     };
   }
 
-  handleChange = name => event => {
+  handleChange(newState) {
+    this.setState(newState);
+    this.props.handleFlavorChange(newState);
+  }
+
+  handleAmountChange = (event) => {
+    const max = 100;
+    const min = 0;
+
+    const valueBase = parseInt(event.target.value, 10);
+    const value = isNaN(valueBase) ? 0 : Math.min(Math.max(valueBase, min), max );
+
+    this.handleChange({
+      ...this.state,
+      amount: value,
+    });
+  };
+  
+  handleFlavorChange = (event) => {
+    const value = event.target.value;
     const newState = {
       ...this.state,
-      [name]: event.target.value
+      flavor: value,
     };
 
     this.setState(newState);
     this.props.handleFlavorChange(newState);
   };
 
-  componentWillMount() {
-    const flavorItem = this.props.flavorItem;
+  setFlavor(props) {
+    const { flavorItem, index } = props;
 
     this.setState({
       amount: flavorItem.get('amount'),
       flavor: flavorItem.get('flavor'),
-      key: flavorItem.get('key'),
+      index,
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setFlavor(nextProps);
+  }
+
+  componentWillMount() {
+    this.setFlavor(this.props);
   }
 
   render() {
@@ -63,9 +90,9 @@ class FlavorItem extends Component {
           <Grid item xs={9}>
             <TextField
               label="Add a flavor"
-              name={`flavor_${this.state.key}`}
+              name={`flavor_${this.state.index}`}
               value={this.state.flavor}
-              onChange={this.handleChange('flavor')}
+              onChange={this.handleFlavorChange}
               InputLabelProps={{
                 shrink: !!this.state.flavor,
               }}
@@ -89,9 +116,9 @@ class FlavorItem extends Component {
           <Grid item xs={3}>
             <TextField
               label="Percentage"
-              name={`amount_${this.state.key}`}
+              name={`amount_${this.state.index}`}
               value={this.state.amount}
-              onChange={this.handleChange('amount')}
+              onChange={this.handleAmountChange}
               InputProps = {{
                 endAdornment: percentageAdornment,
                 type: 'number',
