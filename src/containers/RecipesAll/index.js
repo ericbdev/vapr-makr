@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
-class Calculator extends Component {
+class RecipesAll extends Component {
 
   render() {
     return (
       <div style={{ textAlign: 'center' }}>
-        Calculator
+        RecipesAll
       </div>
     );
   }
 }
 
-export default Calculator;
+export default RecipesAll;

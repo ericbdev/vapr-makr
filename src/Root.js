@@ -16,10 +16,14 @@ import { ApolloProvider } from 'react-apollo';
 import AppHeader from './components/AppHeader/index';
 import AppPage from './components/AppPage/index';
 
-// Views
+// Views - General
 import Home from './containers/Home';
-import Calculator from './containers/Calculator';
-import Recipes from './containers/Recipes';
+
+// Views - Recipes
+import RecipesAdd from './containers/RecipesAdd';
+import RecipesAll from './containers/RecipesAll';
+
+// Views - Stash
 import StashBases from './containers/StashBases';
 import StashFlavors from './containers/StashFlavors';
 import StashJuices from './containers/StashJuices';
@@ -69,9 +73,8 @@ class Root extends Component {
                     <AppHeader {...props} />
                     <AppPage>
                       <Route exact path={routes.home.path} component={Home}/>
-                      <Route path={routes.calculator.path} component={Calculator}/>
-                      <Route path={routes.recipes.children.add.path} component={Recipes}/>
-                      <Route path={routes.recipes.children.all.path} component={Recipes}/>
+                      <Route path={routes.recipes.children.add.path} component={RecipesAdd}/>
+                      <Route path={routes.recipes.children.all.path} component={RecipesAll}/>
                       <Route path={routes.stash.children.flavors.path} component={StashFlavors}/>
                       <Route path={routes.stash.children.bases.path} component={StashBases}/>
                       <Route path={routes.stash.children.juices.path} component={StashJuices}/>

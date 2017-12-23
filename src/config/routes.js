@@ -3,20 +3,16 @@ const routes = {
     title: 'Home',
     path: '/',
   },
-  calculator: {
-    title: 'Calculator',
-    path: '/calculator',
-  },
   recipes: {
     title: 'Recipes',
     children: {
       add: {
         title: 'Add recipe',
-        path: '/recipes/flavors',
+        path: '/recipes/add',
       },
       all: {
         title: 'All recipes',
-        path: '/recipes/bases',
+        path: '/recipes/all',
       },
       view: {
         title: 'View recipes',

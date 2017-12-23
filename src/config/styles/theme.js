@@ -13,6 +13,9 @@ const theme = createMuiTheme({
     fontWeightRegular: 400,
     fontWeightMedium: 500,
   },
+  spacing: {
+    unit: 8,
+  },
 });
 
 export default theme;
