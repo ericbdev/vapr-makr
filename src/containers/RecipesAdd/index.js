@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getIn, List, Map } from 'immutable';
+import { getIn } from 'immutable';
 import { graphql, compose } from 'react-apollo';
 
 import { withStyles } from 'material-ui/styles';
