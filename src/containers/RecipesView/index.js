@@ -1,0 +1,58 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { graphql, compose } from 'react-apollo';
+
+import { withStyles } from 'material-ui/styles';
+
+import Loading from '../../components/Loading';
+import RecipePaper from '../../components/RecipePaper';
+import { recipes } from '../../utils';
+import { queries } from '../../gql';
+
+const styles = theme => ({
+  root: {
+    width: '100%',
+    maxWidth: 800,
+    marginRight: 'auto',
+    marginLeft: 'auto',
+  },
+});
+
+class RecipesAdd extends Component {
+  static propTypes = {
+    classes: PropTypes.object,
+    data: PropTypes.shape({
+      loading: PropTypes.boolean,
+      singleRecipe: PropTypes.object
+    }),
+  };
+
+  render() {
+    const { classes, data } = this.props;
+
+    if (data.loading) {
+      return (
+        <Loading />
+      );
+    }
+
+    return (
+      <div className={classes.root}>
+        TODO: Do things with recipe
+      </div>
+    );
+  }
+}
+
+export default compose(
+  graphql(queries.recipesViewQuery, {
+    options: (props) => ({
+      variables: {
+        recipeId: props.match.params.id,
+      },
+    }),
+  }),
+  withStyles(styles, {
+    name: 'RecipesView',
+  }),
+)(RecipesAdd);
