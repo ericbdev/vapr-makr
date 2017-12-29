@@ -13,6 +13,7 @@ import { InputAdornment } from 'material-ui/Input';
 
 import Loading from '../../components/Loading';
 import { queries } from '../../gql';
+import { recipes } from '../../utils';
 import FlavorItem from './FlavorItem';
 
 const styles = theme => ({
@@ -50,26 +51,10 @@ class RecipesAdd extends Component {
   constructor(props) {
     super(props);
 
+    this.createFlavor = recipes.createRecipeFlavor.bind(this);
+
     this.state = {
-      recipe: Map({
-        name: '',
-        ingredients: Map({
-          result: Map({
-            amount: 0,
-            strength: 0,
-            pgRatio: 25,
-            vgRatio: 75,
-          }),
-          nicotine: Map({
-            strength: 0,
-            pgRatio: 0,
-            vgRatio: 100,
-          }),
-          flavors: List([
-            this.createFlavor(),
-          ]),
-        }),
-      }),
+      recipe: recipes.shapeRecipe(),
     };
   }
 
@@ -85,13 +70,6 @@ class RecipesAdd extends Component {
 
   getFlavorList() {
     return getIn(this.state.recipe, ['ingredients', 'flavors']);
-  }
-
-  createFlavor(flavor = '', amount = 0) {
-    return Map({
-      amount,
-      flavor
-    });
   }
 
   handleFlavorChange = (flavorItem) => {
