@@ -73,16 +73,16 @@ class RecipesAdd extends Component {
   }
 
   handleFlavorChange = (flavorItem) => {
-    const { amount, flavor, index } = flavorItem;
+    const { percent, flavor, index } = flavorItem;
 
     const initialFlavor = this.getFlavorList().get(index);
     const isLast = this.getFlavorList().size === index + 1;
-    const isEmpty = amount === 0;
+    const isEmpty = percent === 0;
     const shouldAdd = (flavor || !isEmpty) && isLast;
     const shouldDelete = !flavor && isEmpty && !isLast;
 
     const newFlavor = initialFlavor
-      .update('amount', () => amount)
+      .update('percent', () => percent)
       .update('flavor', () => flavor);
 
     const newList = this.modifyFlavorList({
@@ -342,7 +342,7 @@ class RecipesAdd extends Component {
                     allFlavors={allFlavors}
                     flavorItem={flavor}
                     className={classes.textField}
-                    percentageAdornment={this.getAdornment('%')}
+                    percentAdornment={this.getAdornment('%')}
                     handleFlavorChange={this.handleFlavorChange}
                   />
                 ))
