@@ -17,6 +17,9 @@ const routes = {
       view: {
         title: 'View recipes',
         path: '/recipes/view/:id',
+        getPath: (id) => {
+          return routes.recipes.children.view.path.replace(':id', id);
+        },
       },
     },
   },

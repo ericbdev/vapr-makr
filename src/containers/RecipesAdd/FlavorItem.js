@@ -21,14 +21,14 @@ class FlavorItem extends Component {
     handleFlavorChange: PropTypes.func.isRequired,
     flavorItem: PropTypes.object.isRequired,
     allFlavors: PropTypes.array.isRequired,
-    percentageAdornment: PropTypes.node.isRequired,
+    percentAdornment: PropTypes.node.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      amount: 0,
+      percent: 0,
       flavor: '',
       index: 0,
     };
@@ -39,7 +39,7 @@ class FlavorItem extends Component {
     this.props.handleFlavorChange(newState);
   }
 
-  handleAmountChange = (event) => {
+  handlePercentChange = (event) => {
     const max = 100;
     const min = 0;
 
@@ -48,7 +48,7 @@ class FlavorItem extends Component {
 
     this.handleChange({
       ...this.state,
-      amount: value,
+      percent: value,
     });
   };
   
@@ -67,7 +67,7 @@ class FlavorItem extends Component {
     const { flavorItem, index } = props;
 
     this.setState({
-      amount: flavorItem.get('amount'),
+      percent: flavorItem.get('percent'),
       flavor: flavorItem.get('flavor'),
       index,
     });
@@ -82,7 +82,7 @@ class FlavorItem extends Component {
   }
 
   render() {
-    const { classes, className, allFlavors, percentageAdornment } = this.props;
+    const { classes, className, allFlavors, percentAdornment } = this.props;
 
     return (
       <Grid item xs={12}>
@@ -115,12 +115,12 @@ class FlavorItem extends Component {
           </Grid>
           <Grid item xs={3}>
             <TextField
-              label="Percentage"
-              name={`amount_${this.state.index}`}
-              value={this.state.amount}
-              onChange={this.handleAmountChange}
+              label="Percent"
+              name={`percent_${this.state.index}`}
+              value={this.state.percent}
+              onChange={this.handlePercentChange}
               InputProps = {{
-                endAdornment: percentageAdornment,
+                endAdornment: percentAdornment,
                 type: 'number',
                 fullWidth: true,
               }}

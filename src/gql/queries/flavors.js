@@ -12,7 +12,7 @@ const flavorListQuery = gql`
       }
     }
   }
- `;
+`;
 
 export {
   flavorListQuery,

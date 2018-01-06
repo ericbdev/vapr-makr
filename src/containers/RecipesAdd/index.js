@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getIn, List, Map } from 'immutable';
+import { getIn } from 'immutable';
 import { graphql, compose } from 'react-apollo';
 
 import { withStyles } from 'material-ui/styles';
@@ -13,6 +13,7 @@ import { InputAdornment } from 'material-ui/Input';
 
 import Loading from '../../components/Loading';
 import { queries } from '../../gql';
+import { recipes } from '../../utils';
 import FlavorItem from './FlavorItem';
 
 const styles = theme => ({
@@ -50,26 +51,10 @@ class RecipesAdd extends Component {
   constructor(props) {
     super(props);
 
+    this.createFlavor = recipes.createRecipeFlavor.bind(this);
+
     this.state = {
-      recipe: Map({
-        name: '',
-        ingredients: Map({
-          result: Map({
-            amount: 0,
-            strength: 0,
-            pgRatio: 25,
-            vgRatio: 75,
-          }),
-          nicotine: Map({
-            strength: 0,
-            pgRatio: 0,
-            vgRatio: 100,
-          }),
-          flavors: List([
-            this.createFlavor(),
-          ]),
-        }),
-      }),
+      recipe: recipes.shapeRecipe(),
     };
   }
 
@@ -87,24 +72,17 @@ class RecipesAdd extends Component {
     return getIn(this.state.recipe, ['ingredients', 'flavors']);
   }
 
-  createFlavor(flavor = '', amount = 0) {
-    return Map({
-      amount,
-      flavor
-    });
-  }
-
   handleFlavorChange = (flavorItem) => {
-    const { amount, flavor, index } = flavorItem;
+    const { percent, flavor, index } = flavorItem;
 
     const initialFlavor = this.getFlavorList().get(index);
     const isLast = this.getFlavorList().size === index + 1;
-    const isEmpty = amount === 0;
+    const isEmpty = percent === 0;
     const shouldAdd = (flavor || !isEmpty) && isLast;
     const shouldDelete = !flavor && isEmpty && !isLast;
 
     const newFlavor = initialFlavor
-      .update('amount', () => amount)
+      .update('percent', () => percent)
       .update('flavor', () => flavor);
 
     const newList = this.modifyFlavorList({
@@ -364,7 +342,7 @@ class RecipesAdd extends Component {
                     allFlavors={allFlavors}
                     flavorItem={flavor}
                     className={classes.textField}
-                    percentageAdornment={this.getAdornment('%')}
+                    percentAdornment={this.getAdornment('%')}
                     handleFlavorChange={this.handleFlavorChange}
                   />
                 ))

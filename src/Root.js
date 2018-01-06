@@ -22,6 +22,7 @@ import Home from './containers/Home';
 // Views - Recipes
 import RecipesAdd from './containers/RecipesAdd';
 import RecipesAll from './containers/RecipesAll';
+import RecipesView from './containers/RecipesView';
 
 // Views - Stash
 import StashBases from './containers/StashBases';
@@ -75,6 +76,7 @@ class Root extends Component {
                       <Route exact path={routes.home.path} component={Home}/>
                       <Route path={routes.recipes.children.add.path} component={RecipesAdd}/>
                       <Route path={routes.recipes.children.all.path} component={RecipesAll}/>
+                      <Route path={routes.recipes.children.view.path} component={RecipesView}/>
                       <Route path={routes.stash.children.flavors.path} component={StashFlavors}/>
                       <Route path={routes.stash.children.bases.path} component={StashBases}/>
                       <Route path={routes.stash.children.juices.path} component={StashJuices}/>
