@@ -38,7 +38,7 @@ class RecipesAdd extends Component {
 
     return (
       <div className={classes.root}>
-        TODO: Do things with recipe
+        <RecipePaper recipe={recipes.shapeRecipe(data.singleRecipe)} />
       </div>
     );
   }

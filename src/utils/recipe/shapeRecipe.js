@@ -23,8 +23,8 @@ function shapeRecipe(unshaped = {}) {
     ],
   };
 
-  const uniform = {...defaults, ...unshaped};
-
+  const uniform = {...defaults, ...unshaped}; 
+  
   return Map({
     id: uniform.id,
     name: uniform.name,
