@@ -12,9 +12,11 @@ import Typography from 'material-ui/Typography';
 import { InputAdornment } from 'material-ui/Input';
 
 import Loading from '../../components/Loading';
+import RecipePaper from '../../components/RecipePaper';
+
 import { queries } from '../../gql';
 import { recipes } from '../../utils';
-import FlavorItem from './FlavorItem';
+import RecipeItem from './RecipeItem';
 
 const styles = theme => ({
   root: {
@@ -22,6 +24,9 @@ const styles = theme => ({
     maxWidth: 800,
     marginRight: 'auto',
     marginLeft: 'auto',
+  },
+  header: {
+    marginBottom: theme.spacing.unit * 3,
   },
   paper: {
     padding: [theme.spacing.unit, theme.spacing.unit * 2, theme.spacing.unit * 2],
@@ -51,7 +56,7 @@ class RecipesAdd extends Component {
   constructor(props) {
     super(props);
 
-    this.createFlavor = recipes.createRecipeItem.bind(this);
+    this.createRecipeItem = recipes.createRecipeItem.bind(this);
 
     this.state = {
       recipe: recipes.shapeRecipe(),
@@ -72,21 +77,21 @@ class RecipesAdd extends Component {
     return getIn(this.state.recipe, ['ingredients', 'recipeItems']);
   }
 
-  handleFlavorChange = (flavorItem) => {
-    const { percent, flavor, index } = flavorItem;
+  handleRecipeItemChange = (RecipeItem) => {
+    const { percent, flavor, index } = RecipeItem;
 
     const isLast = this.getRecipeItems().size === index + 1;
     const isEmpty = percent === 0;
     const shouldAdd = (flavor || !isEmpty) && isLast;
     const shouldDelete = !flavor && isEmpty && !isLast;
 
-    const newFlavor = {
+    const newItem = this.createRecipeItem({
       percent,
       flavor,
-    };
+    });
 
-    const newList = this.modifyFlavorList({
-      flavorList: this.getRecipeItems().set(index, newFlavor),
+    const newList = this.modifyRecipeItems({
+      recipeItems: this.getRecipeItems().set(index, newItem),
       index,
       shouldAdd,
       shouldDelete,
@@ -95,16 +100,16 @@ class RecipesAdd extends Component {
     this.applyChange(['ingredients', 'recipeItems'], newList)
   };
 
-  modifyFlavorList(options) {
-    const {index, flavorList, shouldAdd, shouldDelete} = options;
+  modifyRecipeItems(options) {
+    const {index, recipeItems, shouldAdd, shouldDelete} = options;
     if (shouldAdd && !shouldDelete) {
       // Should it add an empty flavor
-      return flavorList.push(this.createFlavor());
+      return recipeItems.push(this.createRecipeItem());
     } else if(shouldDelete) {
       // Should it remove the current flavor
-      return flavorList.delete(index);
+      return recipeItems.delete(index);
     } else {
-      return flavorList;
+      return recipeItems;
     }
   }
 
@@ -152,11 +157,13 @@ class RecipesAdd extends Component {
 
     return (
       <div className={classes.root}>
-        <Typography type="title" gutterBottom>
-          Add a recipe
-        </Typography>
-
         <form noValidate autoComplete="off">
+          <header className={classes.header}>
+            <Typography type="title" gutterBottom>
+              Add a recipe
+            </Typography>
+          </header>
+
           <Paper className={classes.paper}>
             <Grid container>
               <Grid item xs={12}>
@@ -335,21 +342,23 @@ class RecipesAdd extends Component {
                 </Typography>
               </Grid>
               {
-                this.getRecipeItems().map((flavor, index) => (
-                  <FlavorItem
+                this.getRecipeItems().map((item, index) => (
+                  <RecipeItem
                     key={index}
                     index={index}
                     allFlavors={allFlavors}
-                    flavorItem={flavor}
+                    recipeItem={item}
                     className={classes.textField}
                     percentAdornment={this.getAdornment('%')}
-                    handleFlavorChange={this.handleFlavorChange}
+                    handleRecipeItemChange={this.handleRecipeItemChange}
                   />
                 ))
               }
             </Grid>
           </Paper>
         </form>
+
+        <RecipePaper recipe={this.state.recipe} />
       </div>
     );
   }

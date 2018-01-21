@@ -6,7 +6,7 @@ const flavorListQuery = gql`
       flavorId
       name
       manufacturer {
-        id
+        manufacturerId
         shortName
         longName
       }

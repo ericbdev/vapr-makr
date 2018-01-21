@@ -62,12 +62,13 @@ class RecipePaper extends Component {
 
     this.data = null;
     this.recipe = props.recipe;
+
     this.setupRecipe();
   }
 
   safeNumber = (number) => {
     const float = parseFloat(number);
-    return (isNaN(float) ? number : float.toFixed(2));
+    return (isNaN(float) ? null : float.toFixed(2));
   };
 
   getIngredient(path = []) {
@@ -246,7 +247,7 @@ class RecipePaper extends Component {
     this.data = {...this.data, ...recipe};
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillUpdate(nextProps) {
     this.recipe = nextProps.recipe;
     this.setupRecipe(); 
   }
