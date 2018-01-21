@@ -2,7 +2,13 @@
 
 - short term
     - make RecipePaper handle immutable - done
+    - Make page column structure determined in each container
+    - Allow RecipeAdd values to take decimal points
     - Fix gross errors in RecipePaper when partial data
+      - Show placeholders in Base when not enough information
+      - Show placeholders in Recipieitems / flavor list if not enough information
+      - Weed out NaN/Infinity issues
+      - 
     - Have AddFlavorForm pull manufacturers from database
     - Map Flavor return to flavorItem in db call
     - use RecipeAdd to build out - done

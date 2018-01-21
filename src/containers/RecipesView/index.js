@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
-
 import { withStyles } from 'material-ui/styles';
 
+import AppPage from '../../components/AppPage/index';
 import Loading from '../../components/Loading';
 import RecipePaper from '../../components/RecipePaper';
+
 import { recipes } from '../../utils';
 import { queries } from '../../gql';
 
@@ -37,9 +38,11 @@ class RecipesAdd extends Component {
     }
 
     return (
-      <div className={classes.root}>
-        <RecipePaper recipe={recipes.shapeRecipe(data.singleRecipe)} />
-      </div>
+      <AppPage>
+        <div className={classes.root}>
+          <RecipePaper recipe={recipes.shapeRecipe(data.singleRecipe)} />
+        </div>
+      </AppPage>
     );
   }
 }

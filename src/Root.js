@@ -14,7 +14,6 @@ import { ApolloProvider } from 'react-apollo';
 
 // Layouts
 import AppHeader from './components/AppHeader/index';
-import AppPage from './components/AppPage/index';
 
 // Views - General
 import Home from './containers/Home';
@@ -72,15 +71,15 @@ class Root extends Component {
                 <MuiThemeProvider theme={context.theme} sheetsManager={context.sheetsManager}>
                   <div>
                     <AppHeader {...props} />
-                    <AppPage>
-                      <Route exact path={routes.home.path} component={Home}/>
-                      <Route path={routes.recipes.children.add.path} component={RecipesAdd}/>
-                      <Route path={routes.recipes.children.all.path} component={RecipesAll}/>
-                      <Route path={routes.recipes.children.view.path} component={RecipesView}/>
-                      <Route path={routes.stash.children.flavors.path} component={StashFlavors}/>
-                      <Route path={routes.stash.children.bases.path} component={StashBases}/>
-                      <Route path={routes.stash.children.juices.path} component={StashJuices}/>
-                    </AppPage>
+
+                    <Route exact path={routes.home.path} component={Home}/>
+                    <Route path={routes.recipes.children.add.path} component={RecipesAdd}/>
+                    <Route path={routes.recipes.children.all.path} component={RecipesAll}/>
+                    <Route path={routes.recipes.children.view.path} component={RecipesView}/>
+                    <Route path={routes.stash.children.flavors.path} component={StashFlavors}/>
+                    <Route path={routes.stash.children.bases.path} component={StashBases}/>
+                    <Route path={routes.stash.children.juices.path} component={StashJuices}/>
+
                   </div>
                 </MuiThemeProvider>
               </AppWrapper>

@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import AppPage from '../../components/AppPage/index';
 
 class StashJuices extends Component {
   render() {
     return (
-      <div style={{ textAlign: 'center' }}>StashJuices</div>
+      <AppPage>
+        <div style={{ textAlign: 'center' }}>StashJuices</div>
+      </AppPage>
     );
   }
 }
