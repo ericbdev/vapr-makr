@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { withStyles } from 'material-ui/styles';
+import Grid from 'material-ui/Grid';
 
 import AppPage from '../../components/AppPage/index';
 import Loading from '../../components/Loading';
@@ -39,9 +40,11 @@ class RecipesAdd extends Component {
 
     return (
       <AppPage>
-        <div className={classes.root}>
-          <RecipePaper recipe={recipes.shapeRecipe(data.singleRecipe)} />
-        </div>
+        <Grid item xs={12}>
+          <div className={classes.root}>
+            <RecipePaper recipe={recipes.shapeRecipe(data.singleRecipe)} />
+          </div>
+        </Grid>
       </AppPage>
     );
   }

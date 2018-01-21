@@ -20,11 +20,8 @@ import { recipes } from '../../utils';
 import RecipeItem from './RecipeItem';
 
 const styles = theme => ({
-  root: {
+  formWrapper: {
     width: '100%',
-    maxWidth: 800,
-    marginRight: 'auto',
-    marginLeft: 'auto',
   },
   header: {
     marginBottom: theme.spacing.unit * 3,
@@ -157,9 +154,13 @@ class RecipesAdd extends Component {
     const allFlavors = data.allFlavors;
 
     return (
-      <AppPage>
-        <div className={classes.root}>
-          <form noValidate autoComplete="off">
+      <AppPage layoutType="lg-double">
+        <Grid item xs={12} lg={6}>
+          <form
+            noValidate
+            autoComplete="off"
+            className={classes.formWrapper}
+          >
             <header className={classes.header}>
               <Typography type="title" gutterBottom>
                 Add a recipe
@@ -359,9 +360,11 @@ class RecipesAdd extends Component {
               </Grid>
             </Paper>
           </form>
+        </Grid>
 
+        <Grid item xs={12} lg={6}>
           <RecipePaper recipe={this.state.recipe} />
-        </div>
+        </Grid>
       </AppPage>
     );
   }

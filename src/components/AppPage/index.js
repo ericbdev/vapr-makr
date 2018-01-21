@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from 'material-ui/styles';
+import Grid from 'material-ui/Grid';
 import Notification from '../Notification';
 
 const styles = theme => ({
@@ -16,11 +17,20 @@ const styles = theme => ({
       marginTop: 64,
     },
   },
-  pageContent: {
+  single: {
     marginRight: 'auto',
     marginLeft: 'auto',
     width: 'auto',
     maxWidth: 1060,
+  },
+  lgDouble: {
+    marginRight: 'auto',
+    marginLeft: 'auto',
+    width: 'auto',
+    maxWidth: 800,
+    [theme.breakpoints.up('lg')]: {
+      maxWidth: '100%',
+    },
   }
 });
 
@@ -28,15 +38,34 @@ class AppPage extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     classes: PropTypes.object,
+    layoutType: PropTypes.oneOf([
+      'single',
+      'lg-double'
+    ]),
   };
 
+  containerClass(layoutType) {
+    let containerClass = 'single';
+
+    if (layoutType === 'lg-double') {
+      containerClass = 'lgDouble';
+    }
+
+    return this.props.classes[containerClass];
+  }
+
   render() {
-    const { children, classes } = this.props;
+    const { children, classes, layoutType } = this.props;
 
     return (
-      <div className={classes.root}>
-        <div className={classes.pageContent}>
-          {children}
+      <div>
+        <div className={classes.root}>
+          <Grid
+            container
+            className={this.containerClass(layoutType)}
+          >
+            {children}
+          </Grid>
         </div>
 
         <Notification />

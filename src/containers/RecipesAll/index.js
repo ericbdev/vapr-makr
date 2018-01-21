@@ -10,6 +10,7 @@ import Table, {
   TablePagination,
   TableRow
 } from 'material-ui/Table';
+import Grid from 'material-ui/Grid';
 
 import AppPage from '../../components/AppPage/index';
 import Loading from '../../components/Loading';
@@ -79,7 +80,7 @@ class RecipesAll extends Component {
 
     return (
       <AppPage>
-        <div className={classes.tableWrapper}>
+        <Grid item xs={12} className={classes.tableWrapper}>
           <Table className={classes.table}>
             <TableBody>
               {
@@ -114,7 +115,7 @@ class RecipesAll extends Component {
               </TableRow>
             </TableFooter>
           </Table>
-        </div>
+        </Grid>
       </AppPage>
     )
   }

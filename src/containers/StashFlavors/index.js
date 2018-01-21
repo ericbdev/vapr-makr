@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import Grid from 'material-ui/Grid';
 import Divider from 'material-ui/Divider';
 
 import AppPage from '../../components/AppPage/index';
@@ -15,11 +16,13 @@ class StashFlavors extends Component {
 
     return (
       <AppPage>
-        <AddFlavorForm onFlavourSubmit={handleFlavorSubmit} />
+        <Grid item xs={12}>
+          <AddFlavorForm onFlavourSubmit={handleFlavorSubmit} />
 
-        <Divider/>
+          <Divider/>
 
-        <FlavorTable />
+          <FlavorTable />
+        </Grid>
       </AppPage>
     );
   }
