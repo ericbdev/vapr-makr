@@ -1,10 +1,10 @@
 import { List, Map } from 'immutable';
 
-function createRecipeFlavor(flavor = '', amount = 0) {
-  return Map({
+function createRecipeItem(flavor = '', amount = 0) {
+  return {
     amount,
     flavor,
-  });
+  };
 }
 
 function shapeRecipe(unshaped = {}) {
@@ -18,8 +18,8 @@ function shapeRecipe(unshaped = {}) {
     nicStrength: 0,
     nicPG: 0,
     nicVG: 0,
-    flavors: [
-      createRecipeFlavor(),
+    recipeItems: [
+      createRecipeItem(),
     ],
   };
 
@@ -40,13 +40,13 @@ function shapeRecipe(unshaped = {}) {
         pgRatio: uniform.nicPG,
         vgRatio: uniform.nicVG,
       }),
-      flavors: List(uniform.flavors),
+      recipeItems: List(uniform.recipeItems),
     }),
   });
 
 }
 
 export {
-  createRecipeFlavor,
+  createRecipeItem,
   shapeRecipe,
 };

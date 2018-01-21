@@ -2,7 +2,8 @@
 
 - short term
     - make RecipePaper handle immutable - done
-    - Map Flavor return to flavoritem in dm call
+    - Have AddFlavorForm pull from database
+    - Map Flavor return to flavoritem in db call
     - use RecipeAdd to build out
     - have RecipeView do pre-query
     - abstract out RecipeAdd
@@ -14,9 +15,9 @@
           - https://material-ui-next.com/demos/expansion-panels/
     - AddFlavorForm
        - Add in pg/vg ratio of flavor
-       - Use `<`ExpansionPanel>
+       - Use `<ExpansionPanel>`
        - default to 100
-    - RecipePaper absract out logic
+    - RecipePaper absrtact out logic
         - rebuild ui
       - map stub out existing logic
       - save

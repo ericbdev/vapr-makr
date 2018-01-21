@@ -21,7 +21,17 @@ const recipesViewQuery = gql`
       nicStrength
       nicVG
       nicPG
-      flavors
+      recipeItems {
+        percent
+        flavor {
+          id
+          name
+          manufacturer {
+            shortName
+            longName
+          }
+        }
+      }
     }
   }
 `;

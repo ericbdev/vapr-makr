@@ -1,8 +1,8 @@
 import { manufacturerList, getManufacturerName } from './manufacturers';
-import { createRecipeFlavor, shapeRecipe } from './recipe';
+import { createRecipeItem, shapeRecipe } from './recipe';
 
 const recipes = {
-  createRecipeFlavor,
+  createRecipeItem,
   shapeRecipe,
 };
 

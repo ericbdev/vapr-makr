@@ -54,21 +54,19 @@ class FlavorItem extends Component {
   
   handleFlavorChange = (event) => {
     const value = event.target.value;
-    const newState = {
+
+    this.handleChange({
       ...this.state,
       flavor: value,
-    };
-
-    this.setState(newState);
-    this.props.handleFlavorChange(newState);
+    });
   };
 
   setFlavor(props) {
     const { flavorItem, index } = props;
 
     this.setState({
-      percent: flavorItem.get('percent'),
-      flavor: flavorItem.get('flavor'),
+      percent: flavorItem.percent,
+      flavor: flavorItem.flavor,
       index,
     });
   }
@@ -103,8 +101,8 @@ class FlavorItem extends Component {
               {
                 allFlavors.map(flavor => (
                   <MenuItem
-                    key={flavor.id}
-                    value={flavor.id}
+                    key={flavor.flavorId}
+                    value={flavor.flavorId}
                     className={classes.menuItem}
                   >
                     {flavor.name} ({flavor.manufacturer.shortName})

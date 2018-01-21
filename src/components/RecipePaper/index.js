@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { compose } from 'react-apollo';
 import { getIn, List, Map } from 'immutable';
 import { withStyles } from 'material-ui/styles';
-
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
@@ -27,12 +26,22 @@ const styles = theme => ({
   header: {
     marginBottom: theme.spacing.unit * 3,
   },
+  footer: {
+    marginTop: theme.spacing.unit * 3,
+  },
   tableWrapper: {
     overflowX: 'auto',
-  }
+  },
+  rowDivider: {
+    background: theme.palette.text.lightDivider,
+    height: theme.spacing.unit * 2,
+    '& td': {
+      padding: 0,
+    },
+  },
 });
 
-function Cell(props) {
+const Cell = (props) => {
   const { children, numeric } = props;
 
   return (
@@ -40,7 +49,7 @@ function Cell(props) {
       {children}
     </TableCell>
   );
-}
+};
 
 class RecipePaper extends Component {
   static propTypes = {
@@ -98,16 +107,16 @@ class RecipePaper extends Component {
     return base;
   };
 
-  orderFlavors = () => {
-    const flavors = [];
+  orderRecipeItems = () => {
+    const recipeItems = [];
 
-    // Todo Get full flavor name
-    this.getIngredient(['flavors']).map((flavorItem) => {
-      const title = flavorItem.flavor;
-      const percent = flavorItem.percent;
+    this.getIngredient(['recipeItems']).map((recipeItem) => {
+      const flavor = recipeItem.flavor;
+      const title = `${flavor.name} (${flavor.manufacturer.shortName})`;
+      const percent = recipeItem.percent;
       const ml = (percent / 100) * this.getIngredient(['result', 'amount']);
 
-      flavors.push({
+      recipeItems.push({
         title,
         ml,
         percent,
@@ -115,7 +124,7 @@ class RecipePaper extends Component {
       })
     });
 
-    return flavors;
+    return recipeItems;
   };
 
   totalsVG = () => {
@@ -169,7 +178,7 @@ class RecipePaper extends Component {
   };
 
   totalsFlavors = () => {
-    const percent = this.getIngredient(['flavors']).reduce((total, item) => {
+    const percent = this.getIngredient(['recipeItems']).reduce((total, item) => {
       return total + item.percent;
     }, 0);
     const ml = (percent / 100) * this.getIngredient(['result', 'amount']);
@@ -220,8 +229,6 @@ class RecipePaper extends Component {
       ml: dilutions.pg.ml + dilutions.vg.ml + totals.nicotine.combined.ml,
       percent: dilutions.pg.percent + dilutions.vg.percent + totals.nicotine.combined.percent,
     };
-    
-    console.log({base, totals, dilutions});
 
     this.setData({
       base,
@@ -240,7 +247,6 @@ class RecipePaper extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const recipe = nextProps.recipe;
     this.recipe = nextProps.recipe;
     this.setupRecipe(); 
   }
@@ -249,7 +255,7 @@ class RecipePaper extends Component {
     const { classes } = this.props;
     const recipeName = this.recipe.get('name');
     const base = this.orderBase();
-    const flavors = this.orderFlavors();
+    const recipeItems = this.orderRecipeItems();
 
     return (
       <Paper className={classes.root}>
@@ -283,8 +289,15 @@ class RecipePaper extends Component {
                     </TableRow>
                   ))
                 }
+
+                <TableRow className={classes.rowDivider}>
+                  <TableCell />
+                  <TableCell />
+                  <TableCell />
+                </TableRow>
+
                 {
-                  flavors.map((row, index) => (
+                  recipeItems.map((row, index) => (
                     <TableRow key={index}>
                       <Cell>{row.title}</Cell>
                       <Cell numeric>{this.safeNumber(row.ml)}</Cell>
@@ -292,11 +305,19 @@ class RecipePaper extends Component {
                     </TableRow>
                   ))
                 }
+
+                <TableRow className={classes.rowDivider}>
+                  <TableCell />
+                  <TableCell />
+                  <TableCell />
+                </TableRow>
+
                 <TableRow>
                   <Cell>Total base</Cell>
                   <Cell numeric>{this.safeNumber(this.data.base.ml)}</Cell>
                   <Cell numeric>{this.safeNumber(this.data.base.percent)}</Cell>
                 </TableRow>
+
                 <TableRow>
                   <Cell>Total flavors</Cell>
                   <Cell numeric>
@@ -313,7 +334,7 @@ class RecipePaper extends Component {
           <Divider/>
 
           <Grid
-            className={classes.row}
+            className={classNames([classes.footer, classes.row])}
             component="footer"
             container
             spacing={8}

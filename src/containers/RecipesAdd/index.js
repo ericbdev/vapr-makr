@@ -51,7 +51,7 @@ class RecipesAdd extends Component {
   constructor(props) {
     super(props);
 
-    this.createFlavor = recipes.createRecipeFlavor.bind(this);
+    this.createFlavor = recipes.createRecipeItem.bind(this);
 
     this.state = {
       recipe: recipes.shapeRecipe(),
@@ -68,31 +68,31 @@ class RecipesAdd extends Component {
     });
   }
 
-  getFlavorList() {
-    return getIn(this.state.recipe, ['ingredients', 'flavors']);
+  getRecipeItems() {
+    return getIn(this.state.recipe, ['ingredients', 'recipeItems']);
   }
 
   handleFlavorChange = (flavorItem) => {
     const { percent, flavor, index } = flavorItem;
 
-    const initialFlavor = this.getFlavorList().get(index);
-    const isLast = this.getFlavorList().size === index + 1;
+    const isLast = this.getRecipeItems().size === index + 1;
     const isEmpty = percent === 0;
     const shouldAdd = (flavor || !isEmpty) && isLast;
     const shouldDelete = !flavor && isEmpty && !isLast;
 
-    const newFlavor = initialFlavor
-      .update('percent', () => percent)
-      .update('flavor', () => flavor);
+    const newFlavor = {
+      percent,
+      flavor,
+    };
 
     const newList = this.modifyFlavorList({
-      flavorList: this.getFlavorList().set(index, newFlavor),
+      flavorList: this.getRecipeItems().set(index, newFlavor),
       index,
       shouldAdd,
       shouldDelete,
     });
 
-    this.applyChange(['ingredients', 'flavors'], newList)
+    this.applyChange(['ingredients', 'recipeItems'], newList)
   };
 
   modifyFlavorList(options) {
@@ -335,7 +335,7 @@ class RecipesAdd extends Component {
                 </Typography>
               </Grid>
               {
-                this.getFlavorList().map((flavor, index) => (
+                this.getRecipeItems().map((flavor, index) => (
                   <FlavorItem
                     key={index}
                     index={index}

@@ -116,7 +116,7 @@ class FlavorTable extends Component {
                   <TableRow
                     hover
                     tabIndex={-1}
-                    key={flavor.id}
+                    key={flavor.flavorId}
                   >
                     <TableCell padding="none">{flavor.name}</TableCell>
                     <TableCell>{flavor.manufacturer.longName}</TableCell>
