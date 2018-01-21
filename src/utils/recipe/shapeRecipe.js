@@ -1,10 +1,32 @@
 import { List, Map } from 'immutable';
 
-function createRecipeFlavor(flavor = '', amount = 0) {
-  return Map({
-    amount,
-    flavor,
-  });
+/**
+ *
+ * @param options
+ * @param options.percent {Number}
+ * @param options.flavor {Object} - Object of flavor
+ * @param options.flavor.flavorId {Number} - flavorId of flavor
+ * @param options.flavor.name {String} - Name of flavor
+ * @param options.flavor.manufacturer {Object} Manufacturer object of flavor
+ * @param options.flavor.manufacturer.longName {String} - Long version of Manufacturer name
+ * @param options.flavor.manufacturer.shortName {String} - Short version of Manufacturer name
+ *
+ * @returns {*}
+ */
+function createRecipeItem(options = {}) {
+  const defaults = {
+    percent: 0,
+    flavor: {
+      name: '',
+      flavorId: 0,
+      manufacturer: {
+        longName: '',
+        shortName: '',
+      },
+    },
+  };
+
+  return Object.assign({}, defaults, options);
 }
 
 function shapeRecipe(unshaped = {}) {
@@ -18,12 +40,12 @@ function shapeRecipe(unshaped = {}) {
     nicStrength: 0,
     nicPG: 0,
     nicVG: 0,
-    flavors: [
-      createRecipeFlavor(),
+    recipeItems: [
+      createRecipeItem(),
     ],
   };
 
-  const uniform = {...defaults, ...unshaped}; 
+  const uniform = {...defaults, ...unshaped};
   
   return Map({
     id: uniform.id,
@@ -40,13 +62,12 @@ function shapeRecipe(unshaped = {}) {
         pgRatio: uniform.nicPG,
         vgRatio: uniform.nicVG,
       }),
-      flavors: List(uniform.flavors),
+      recipeItems: List(uniform.recipeItems),
     }),
   });
-
 }
 
 export {
-  createRecipeFlavor,
+  createRecipeItem,
   shapeRecipe,
 };

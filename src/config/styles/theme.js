@@ -1,11 +1,8 @@
 import { createMuiTheme } from 'material-ui/styles';
-import { blueGrey, indigo } from 'material-ui/colors';
+import themeStyles from './styles';
 
 const theme = createMuiTheme({
-  palette: {
-    primary: blueGrey,
-    secondary: indigo,
-  },
+  palette: themeStyles.palette,
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     fontSize: 14,

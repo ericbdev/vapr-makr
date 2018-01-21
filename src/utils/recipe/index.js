@@ -1,6 +1,6 @@
-import { createRecipeFlavor, shapeRecipe } from './shapeRecipe';
+import { createRecipeItem, shapeRecipe } from './shapeRecipe';
 
 export {
-  createRecipeFlavor,
+  createRecipeItem,
   shapeRecipe,
 };

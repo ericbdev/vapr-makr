@@ -3,10 +3,10 @@ import gql from 'graphql-tag';
 const flavorListQuery = gql`
   query FlavorListQuery {
     allFlavors {
-      id
-      name,
+      flavorId
+      name
       manufacturer {
-        id
+        manufacturerId
         shortName
         longName
       }

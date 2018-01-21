@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import Grid from 'material-ui/Grid';
 import Divider from 'material-ui/Divider';
+
+import AppPage from '../../components/AppPage/index';
 import FlavorTable from './FlavorTable';
 import AddFlavorForm from './AddFlavorForm';
 
@@ -12,13 +15,15 @@ class StashFlavors extends Component {
     const {  handleFlavorSubmit } = this.props;
 
     return (
-      <div>
-        <AddFlavorForm onFlavourSubmit={handleFlavorSubmit} />
+      <AppPage>
+        <Grid item xs={12}>
+          <AddFlavorForm onFlavourSubmit={handleFlavorSubmit} />
 
-        <Divider/>
+          <Divider/>
 
-        <FlavorTable />
-      </div>
+          <FlavorTable />
+        </Grid>
+      </AppPage>
     );
   }
 }

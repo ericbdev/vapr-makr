@@ -11,17 +11,20 @@ import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import { InputAdornment } from 'material-ui/Input';
 
+import AppPage from '../../components/AppPage/index';
 import Loading from '../../components/Loading';
+import RecipePaper from '../../components/RecipePaper';
+
 import { queries } from '../../gql';
 import { recipes } from '../../utils';
-import FlavorItem from './FlavorItem';
+import RecipeItem from './RecipeItem';
 
 const styles = theme => ({
-  root: {
+  formWrapper: {
     width: '100%',
-    maxWidth: 800,
-    marginRight: 'auto',
-    marginLeft: 'auto',
+  },
+  header: {
+    marginBottom: theme.spacing.unit * 3,
   },
   paper: {
     padding: [theme.spacing.unit, theme.spacing.unit * 2, theme.spacing.unit * 2],
@@ -51,7 +54,7 @@ class RecipesAdd extends Component {
   constructor(props) {
     super(props);
 
-    this.createFlavor = recipes.createRecipeFlavor.bind(this);
+    this.createRecipeItem = recipes.createRecipeItem.bind(this);
 
     this.state = {
       recipe: recipes.shapeRecipe(),
@@ -68,43 +71,43 @@ class RecipesAdd extends Component {
     });
   }
 
-  getFlavorList() {
-    return getIn(this.state.recipe, ['ingredients', 'flavors']);
+  getRecipeItems() {
+    return getIn(this.state.recipe, ['ingredients', 'recipeItems']);
   }
 
-  handleFlavorChange = (flavorItem) => {
-    const { percent, flavor, index } = flavorItem;
+  handleRecipeItemChange = (RecipeItem) => {
+    const { percent, flavor, index } = RecipeItem;
 
-    const initialFlavor = this.getFlavorList().get(index);
-    const isLast = this.getFlavorList().size === index + 1;
+    const isLast = this.getRecipeItems().size === index + 1;
     const isEmpty = percent === 0;
     const shouldAdd = (flavor || !isEmpty) && isLast;
     const shouldDelete = !flavor && isEmpty && !isLast;
 
-    const newFlavor = initialFlavor
-      .update('percent', () => percent)
-      .update('flavor', () => flavor);
+    const newItem = this.createRecipeItem({
+      percent,
+      flavor,
+    });
 
-    const newList = this.modifyFlavorList({
-      flavorList: this.getFlavorList().set(index, newFlavor),
+    const newList = this.modifyRecipeItems({
+      recipeItems: this.getRecipeItems().set(index, newItem),
       index,
       shouldAdd,
       shouldDelete,
     });
 
-    this.applyChange(['ingredients', 'flavors'], newList)
+    this.applyChange(['ingredients', 'recipeItems'], newList)
   };
 
-  modifyFlavorList(options) {
-    const {index, flavorList, shouldAdd, shouldDelete} = options;
+  modifyRecipeItems(options) {
+    const {index, recipeItems, shouldAdd, shouldDelete} = options;
     if (shouldAdd && !shouldDelete) {
       // Should it add an empty flavor
-      return flavorList.push(this.createFlavor());
+      return recipeItems.push(this.createRecipeItem());
     } else if(shouldDelete) {
       // Should it remove the current flavor
-      return flavorList.delete(index);
+      return recipeItems.delete(index);
     } else {
-      return flavorList;
+      return recipeItems;
     }
   }
 
@@ -151,206 +154,218 @@ class RecipesAdd extends Component {
     const allFlavors = data.allFlavors;
 
     return (
-      <div className={classes.root}>
-        <Typography type="title" gutterBottom>
-          Add a recipe
-        </Typography>
+      <AppPage layoutType="lg-double">
+        <Grid item xs={12} lg={6}>
+          <form
+            noValidate
+            autoComplete="off"
+            className={classes.formWrapper}
+          >
+            <header className={classes.header}>
+              <Typography type="title" gutterBottom>
+                Add a recipe
+              </Typography>
+            </header>
 
-        <form noValidate autoComplete="off">
-          <Paper className={classes.paper}>
-            <Grid container>
-              <Grid item xs={12}>
-                <TextField
-                  label="Recipe name"
-                  name="name"
-                  value={this.state.recipe.get('name')}
-                  onChange={this.handleChange(['name'], false)}
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  margin="normal"
-                />
-              </Grid>
-            </Grid>
-
-            <Divider className={classes.divider}/>
-
-            <Grid container>
-              <Grid item xs={12}>
-                <Typography type="subheading" gutterBottom>
-                  Resulting product
-                </Typography>
+            <Paper className={classes.paper}>
+              <Grid container>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Recipe name"
+                    name="name"
+                    value={this.state.recipe.get('name')}
+                    onChange={this.handleChange(['name'], false)}
+                    className={classes.textField}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    margin="normal"
+                  />
+                </Grid>
               </Grid>
 
-              <Grid item xs={6} md={3}>
-                <TextField
-                  label="Amount to make"
-                  name="amount"
-                  value={this.getIngredient(['result', 'amount'])}
-                  onChange={this.handleChange(['result', 'amount'])}
-                  className={classes.textField}
-                  InputProps = {{
-                    endAdornment: this.getAdornment('ml'),
-                    type: 'number',
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  margin="normal"
-                />
+              <Divider className={classes.divider}/>
+
+              <Grid container>
+                <Grid item xs={12}>
+                  <Typography type="subheading" gutterBottom>
+                    Resulting product
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={6} md={3}>
+                  <TextField
+                    label="Amount to make"
+                    name="amount"
+                    value={this.getIngredient(['result', 'amount'])}
+                    onChange={this.handleChange(['result', 'amount'])}
+                    className={classes.textField}
+                    InputProps = {{
+                      endAdornment: this.getAdornment('ml'),
+                      type: 'number',
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    margin="normal"
+                  />
+                </Grid>
+
+                <Grid item xs={6} md={3}>
+                  <TextField
+                    label="Desired strength"
+                    name="strength"
+                    value={this.getIngredient(['result', 'strength'])}
+                    onChange={this.handleChange(['result', 'strength'])}
+                    className={classes.textField}
+                    InputProps = {{
+                      endAdornment: this.getAdornment('mg'),
+                      type: 'number',
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    margin="normal"
+                  />
+                </Grid>
+
+                <Grid item xs={6} md={3}>
+                  <TextField
+                    label="VG Ratio"
+                    name="result_vgRatio"
+                    value={this.getIngredient(['result', 'vgRatio'])}
+                    onChange={this.handleVGRatio('result')}
+                    className={classes.textField}
+                    InputProps = {{
+                      endAdornment: this.getAdornment('%'),
+                      type: 'number',
+                      max: 100,
+                      min: 0,
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    margin="normal"
+                  />
+                </Grid>
+
+                <Grid item xs={6} md={3}>
+                  <TextField
+                    label="PG Ratio"
+                    name="result_pgRatio"
+                    value={this.getIngredient(['result', 'pgRatio'])}
+                    onChange={this.handleVGRatio('result')}
+                    className={classes.textField}
+                    InputProps = {{
+                      endAdornment: this.getAdornment('%'),
+                      type: 'number',
+                      max: 100,
+                      min: 0,
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    margin="normal"
+                  />
+                </Grid>
               </Grid>
 
-              <Grid item xs={6} md={3}>
-                <TextField
-                  label="Desired strength"
-                  name="strength"
-                  value={this.getIngredient(['result', 'strength'])}
-                  onChange={this.handleChange(['result', 'strength'])}
-                  className={classes.textField}
-                  InputProps = {{
-                    endAdornment: this.getAdornment('mg'),
-                    type: 'number',
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  margin="normal"
-                />
-              </Grid>
+              <Divider className={classes.divider}/>
 
-              <Grid item xs={6} md={3}>
-                <TextField
-                  label="VG Ratio"
-                  name="result_vgRatio"
-                  value={this.getIngredient(['result', 'vgRatio'])}
-                  onChange={this.handleVGRatio('result')}
-                  className={classes.textField}
-                  InputProps = {{
-                    endAdornment: this.getAdornment('%'),
-                    type: 'number',
-                    max: 100,
-                    min: 0,
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  margin="normal"
-                />
-              </Grid>
+              <Grid container>
+                <Grid item xs={12}>
+                  <Typography type="subheading" gutterBottom>
+                    Nicotine information
+                  </Typography>
+                </Grid>
 
-              <Grid item xs={6} md={3}>
-                <TextField
-                  label="PG Ratio"
-                  name="result_pgRatio"
-                  value={this.getIngredient(['result', 'pgRatio'])}
-                  onChange={this.handleVGRatio('result')}
-                  className={classes.textField}
-                  InputProps = {{
-                    endAdornment: this.getAdornment('%'),
-                    type: 'number',
-                    max: 100,
-                    min: 0,
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  margin="normal"
-                />
-              </Grid>
-            </Grid>
+                <Grid item xs={12} md={4}>
+                  <TextField
+                    label="Nicotine strength"
+                    value={this.getIngredient(['nicotine', 'strength'])}
+                    onChange={this.handleChange(['nicotine', 'strength'])}
+                    className={classes.textField}
+                    InputProps = {{
+                      endAdornment: this.getAdornment('mg'),
+                      type: 'number',
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    margin="normal"
+                  />
+                </Grid>
 
-            <Divider className={classes.divider}/>
-
-            <Grid container>
-              <Grid item xs={12}>
-                <Typography type="subheading" gutterBottom>
-                  Nicotine information
-                </Typography>
-              </Grid>
-
-              <Grid item xs={12} md={4}>
-                <TextField
-                  label="Nicotine strength"
-                  value={this.getIngredient(['nicotine', 'strength'])}
-                  onChange={this.handleChange(['nicotine', 'strength'])}
-                  className={classes.textField}
-                  InputProps = {{
-                    endAdornment: this.getAdornment('mg'),
-                    type: 'number',
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  margin="normal"
-                />
-              </Grid>
-
-              <Grid item xs={12} md={6}>
-                <Grid container>
-                  <Grid item xs={6} md={4}>
-                    <TextField
-                      label="VG content"
-                      name="nicotine_vgRatio"
-                      value={this.getIngredient(['nicotine', 'vgRatio'])}
-                      onChange={this.handleVGRatio('nicotine')}
-                      className={classes.textField}
-                      InputProps = {{
-                        endAdornment: this.getAdornment('%'),
-                        type: 'number',
-                      }}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      margin="normal"
-                    />
-                  </Grid>
-                  <Grid item xs={6} md={4}>
-                    <TextField
-                      label="PG content"
-                      name="nicotine_pgRatio"
-                      value={this.getIngredient(['nicotine', 'pgRatio'])}
-                      onChange={this.handleVGRatio('nicotine')}
-                      className={classes.textField}
-                      InputProps = {{
-                        endAdornment: this.getAdornment('%'),
-                        type: 'number',
-                      }}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      margin="normal"
-                    />
+                <Grid item xs={12} md={6}>
+                  <Grid container>
+                    <Grid item xs={6} md={4}>
+                      <TextField
+                        label="VG content"
+                        name="nicotine_vgRatio"
+                        value={this.getIngredient(['nicotine', 'vgRatio'])}
+                        onChange={this.handleVGRatio('nicotine')}
+                        className={classes.textField}
+                        InputProps = {{
+                          endAdornment: this.getAdornment('%'),
+                          type: 'number',
+                        }}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        margin="normal"
+                      />
+                    </Grid>
+                    <Grid item xs={6} md={4}>
+                      <TextField
+                        label="PG content"
+                        name="nicotine_pgRatio"
+                        value={this.getIngredient(['nicotine', 'pgRatio'])}
+                        onChange={this.handleVGRatio('nicotine')}
+                        className={classes.textField}
+                        InputProps = {{
+                          endAdornment: this.getAdornment('%'),
+                          type: 'number',
+                        }}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        margin="normal"
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
 
-            <Divider className={classes.divider}/>
+              <Divider className={classes.divider}/>
 
-            <Grid container>
-              <Grid item xs={12}>
-                <Typography type="subheading" gutterBottom>
-                  Flavors
-                </Typography>
+              <Grid container>
+                <Grid item xs={12}>
+                  <Typography type="subheading" gutterBottom>
+                    Flavors
+                  </Typography>
+                </Grid>
+                {
+                  this.getRecipeItems().map((item, index) => (
+                    <RecipeItem
+                      key={index}
+                      index={index}
+                      allFlavors={allFlavors}
+                      recipeItem={item}
+                      className={classes.textField}
+                      percentAdornment={this.getAdornment('%')}
+                      handleRecipeItemChange={this.handleRecipeItemChange}
+                    />
+                  ))
+                }
               </Grid>
-              {
-                this.getFlavorList().map((flavor, index) => (
-                  <FlavorItem
-                    key={index}
-                    index={index}
-                    allFlavors={allFlavors}
-                    flavorItem={flavor}
-                    className={classes.textField}
-                    percentAdornment={this.getAdornment('%')}
-                    handleFlavorChange={this.handleFlavorChange}
-                  />
-                ))
-              }
-            </Grid>
-          </Paper>
-        </form>
-      </div>
+            </Paper>
+          </form>
+        </Grid>
+
+        <Grid item xs={12} lg={6}>
+          <RecipePaper recipe={this.state.recipe} />
+        </Grid>
+      </AppPage>
     );
   }
 }

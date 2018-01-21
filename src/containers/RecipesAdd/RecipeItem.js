@@ -16,10 +16,10 @@ const styles = theme => ({
   }
 });
 
-class FlavorItem extends Component {
+class RecipeItem extends Component {
   static propTypes = {
-    handleFlavorChange: PropTypes.func.isRequired,
-    flavorItem: PropTypes.object.isRequired,
+    handleRecipeItemChange: PropTypes.func.isRequired,
+    recipeItem: PropTypes.object.isRequired,
     allFlavors: PropTypes.array.isRequired,
     percentAdornment: PropTypes.node.isRequired,
   };
@@ -36,7 +36,7 @@ class FlavorItem extends Component {
 
   handleChange(newState) {
     this.setState(newState);
-    this.props.handleFlavorChange(newState);
+    this.props.handleRecipeItemChange(newState);
   }
 
   handlePercentChange = (event) => {
@@ -52,23 +52,26 @@ class FlavorItem extends Component {
     });
   };
   
-  handleFlavorChange = (event) => {
+  handleRecipeItemChange = (event) => {
     const value = event.target.value;
-    const newState = {
-      ...this.state,
-      flavor: value,
-    };
+    const flavor = this.props.allFlavors.filter(flavor => flavor.flavorId === value);
 
-    this.setState(newState);
-    this.props.handleFlavorChange(newState);
+    if (flavor.length) {
+      this.handleChange({
+        ...this.state,
+        flavor: flavor[0],
+      });
+    } else {
+      //TODO: Handle error Notification
+    }
   };
 
   setFlavor(props) {
-    const { flavorItem, index } = props;
+    const { recipeItem, index } = props;
 
     this.setState({
-      percent: flavorItem.get('percent'),
-      flavor: flavorItem.get('flavor'),
+      percent: recipeItem.percent,
+      flavor: recipeItem.flavor,
       index,
     });
   }
@@ -91,10 +94,10 @@ class FlavorItem extends Component {
             <TextField
               label="Add a flavor"
               name={`flavor_${this.state.index}`}
-              value={this.state.flavor}
-              onChange={this.handleFlavorChange}
+              value={this.state.flavor.flavorId}
+              onChange={this.handleRecipeItemChange}
               InputLabelProps={{
-                shrink: !!this.state.flavor,
+                shrink: !!this.state.flavor.flavorId,
               }}
               margin="normal"
               select
@@ -103,8 +106,8 @@ class FlavorItem extends Component {
               {
                 allFlavors.map(flavor => (
                   <MenuItem
-                    key={flavor.id}
-                    value={flavor.id}
+                    key={flavor.flavorId}
+                    value={flavor.flavorId}
                     className={classes.menuItem}
                   >
                     {flavor.name} ({flavor.manufacturer.shortName})
@@ -138,4 +141,4 @@ class FlavorItem extends Component {
   }
 }
 
-export default withStyles(styles)(FlavorItem);
+export default withStyles(styles)(RecipeItem);

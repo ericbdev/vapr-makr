@@ -2,21 +2,30 @@
 
 - short term
     - make RecipePaper handle immutable - done
-    - Map Flavor return to flavoritem in dm call
-    - use RecipeAdd to build out
+    - Make page column structure determined in each container
+    - Allow RecipeAdd values to take decimal points
+    - Fix gross errors in RecipePaper when partial data
+      - Show placeholders in Base when not enough information
+      - Show placeholders in Recipieitems / flavor list if not enough information
+      - Weed out NaN/Infinity issues
+      - 
+    - Have AddFlavorForm pull manufacturers from database
+    - Map Flavor return to flavorItem in db call
+    - use RecipeAdd to build out - done
     - have RecipeView do pre-query
     - abstract out RecipeAdd
     - Don't bother doing sanitation
     - have RecipeAdd save view crud
-    - on save, do toast errors and highlight fields
+        - on save, do toast errors and highlight fields
     - RecipeAdd 
       - nicotine settings on edit, put into `<ExpansionPanel>`
           - https://material-ui-next.com/demos/expansion-panels/
+      - error handling on recipe flavorchange / recipeitem change
     - AddFlavorForm
        - Add in pg/vg ratio of flavor
-       - Use `<`ExpansionPanel>
+       - Use `<ExpansionPanel>`
        - default to 100
-    - RecipePaper absract out logic
+    - RecipePaper absrtact out logic
         - rebuild ui
       - map stub out existing logic
       - save
@@ -30,7 +39,7 @@
     - Add comments to recipe
     - Add in steep time to recipe
     - Abstract out Flavor pickers
-    - Make flavor picker handle look a head
+    - Make flavor picker handle typeahead
     - When custom type, not match,
         - add checkbox, or state change that is custom, and no flavor match
         - figure out graphQL to not fail? or, store empty as empty object.

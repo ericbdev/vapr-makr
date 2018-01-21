@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
+import Grid from 'material-ui/Grid';
+import AppPage from '../../components/AppPage/index';
 
 class StashBases extends Component {
 
   render() {
     return (
-      <div style={{ textAlign: 'center' }}>StashBases</div>
+      <AppPage>
+        <Grid item xs={12} style={{ textAlign: 'center' }}>
+          StashBases
+        </Grid>
+      </AppPage>
     );
   }
 }

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { graphql, compose } from 'react-apollo';
-
 import Button from 'material-ui/Button';
 import Table, {
   TableBody,
@@ -11,7 +10,9 @@ import Table, {
   TablePagination,
   TableRow
 } from 'material-ui/Table';
+import Grid from 'material-ui/Grid';
 
+import AppPage from '../../components/AppPage/index';
 import Loading from '../../components/Loading';
 import { routes } from '../../config/index';
 import { queries } from '../../gql';
@@ -78,42 +79,44 @@ class RecipesAll extends Component {
     const recipes = this.sortRecipes(data.allRecipes);
 
     return (
-      <div className={classes.tableWrapper}>
-        <Table className={classes.table}>
-          <TableBody>
-            {
-              recipes.slice(pagination.start, pagination.end).map(recipe => {
-                return (
-                  <TableRow
-                    tabIndex={-1}
-                    key={recipe.id}
-                  >
-                    <TableCell padding="none">
-                     <Button
-                       href={routes.recipes.children.view.getPath(recipe.id)}
-                       >
-                        {recipe.name}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })
-            }
-          </TableBody>
+      <AppPage>
+        <Grid item xs={12} className={classes.tableWrapper}>
+          <Table className={classes.table}>
+            <TableBody>
+              {
+                recipes.slice(pagination.start, pagination.end).map(recipe => {
+                  return (
+                    <TableRow
+                      tabIndex={-1}
+                      key={recipe.id}
+                    >
+                      <TableCell padding="none">
+                       <Button
+                         href={routes.recipes.children.view.getPath(recipe.id)}
+                         >
+                          {recipe.name}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              }
+            </TableBody>
 
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                count={recipes.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={this.handleChangePage}
-                onChangeRowsPerPage={this.handleChangeRowsPerPage}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </div>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  count={recipes.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onChangePage={this.handleChangePage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                />
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </Grid>
+      </AppPage>
     )
   }
 }
