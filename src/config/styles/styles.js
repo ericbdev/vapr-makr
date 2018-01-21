@@ -1,4 +1,9 @@
-import { common } from 'material-ui/colors';
+import { common, blueGrey, indigo  } from 'material-ui/colors';
+
+const palette = {
+  primary: blueGrey,
+  secondary: indigo,
+};
 
 const layout = {
   appDrawer: {
@@ -13,6 +18,7 @@ const colors = {
 };
 
 const themeStyles = {
+  palette,
   layout,
   colors,
 };
