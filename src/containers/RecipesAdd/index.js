@@ -79,9 +79,10 @@ class RecipesAdd extends Component {
     const { percent, flavor, index } = RecipeItem;
 
     const isLast = this.getRecipeItems().size === index + 1;
-    const isEmpty = percent === 0;
-    const shouldAdd = (flavor || !isEmpty) && isLast;
-    const shouldDelete = !flavor && isEmpty && !isLast;
+    const isEmptyFlavor = percent === 0;
+    const isNoFlavor = !flavor.flavorId;
+    const shouldAdd = (!isNoFlavor || !isEmptyFlavor) && isLast;
+    const shouldDelete = ((isNoFlavor && isEmptyFlavor) && !isLast) || isNoFlavor;
 
     const newItem = this.createRecipeItem({
       percent,
@@ -124,6 +125,7 @@ class RecipesAdd extends Component {
     const max = 100;
     const min = 0;
     const field = event.target.name.replace(`${prefix}_`, '');
+
     // Sanitize value. Must be a number, bust be between 0 and 100
     const valueBase = parseInt(event.target.value, 10);
     const value = isNaN(valueBase) ? 0 : Math.min(Math.max(valueBase, min), max );
@@ -152,6 +154,7 @@ class RecipesAdd extends Component {
     }
 
     const allFlavors = data.allFlavors;
+    const recipeItems = this.getRecipeItems();
 
     return (
       <AppPage layoutType="lg-double">
@@ -345,15 +348,16 @@ class RecipesAdd extends Component {
                   </Typography>
                 </Grid>
                 {
-                  this.getRecipeItems().map((item, index) => (
+                  recipeItems.map((item, index) => (
                     <RecipeItem
-                      key={index}
-                      index={index}
                       allFlavors={allFlavors}
-                      recipeItem={item}
                       className={classes.textField}
-                      percentAdornment={this.getAdornment('%')}
                       handleRecipeItemChange={this.handleRecipeItemChange}
+                      index={index}
+                      isLast={recipeItems.size === index + 1}
+                      key={index}
+                      percentAdornment={this.getAdornment('%')}
+                      recipeItem={item}
                     />
                   ))
                 }

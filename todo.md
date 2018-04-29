@@ -1,8 +1,8 @@
 ## TODOS:
 
 - short term
-    - Fix flavor rows not removing
-    - Fix empty rows in RecipeCard
+    - ~~Fix flavor rows not removing~~
+    - ~~Fix empty rows in RecipeCard~~
     - Have AddFlavorForm pull manufacturers from database
     - AddFlavorForm
         - Use `<ExpansionPanel>`

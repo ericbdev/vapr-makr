@@ -25,6 +25,7 @@ const recipesViewQuery = gql`
         percent
         flavor {
           id
+          flavorId
           name
           manufacturer {
             shortName
