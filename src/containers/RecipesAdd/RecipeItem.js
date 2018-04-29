@@ -9,7 +9,7 @@ import Grid from 'material-ui/Grid';
 const styles = theme => ({
   'menuItem': {
     height: 20,
-    fontSize: theme.typography.fontSize,
+    fontSize: theme.typography.fontSize * 0.85,
     lineHeight: 1,
     paddingTop: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
@@ -18,10 +18,13 @@ const styles = theme => ({
 
 class RecipeItem extends Component {
   static propTypes = {
-    handleRecipeItemChange: PropTypes.func.isRequired,
-    recipeItem: PropTypes.object.isRequired,
     allFlavors: PropTypes.array.isRequired,
+    className: PropTypes.string.isRequired,
+    handleRecipeItemChange: PropTypes.func.isRequired,
+    index: PropTypes.number.isRequired,
+    isLast: PropTypes.bool.isRequired,
     percentAdornment: PropTypes.node.isRequired,
+    recipeItem: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -54,16 +57,13 @@ class RecipeItem extends Component {
   
   handleRecipeItemChange = (event) => {
     const value = event.target.value;
-    const flavor = this.props.allFlavors.filter(flavor => flavor.flavorId === value);
+    const flavorMatch = this.props.allFlavors.filter(flavor => flavor.flavorId === value);
+    const flavor = flavorMatch.length ? flavorMatch[0] : { flavorId: value };
 
-    if (flavor.length) {
-      this.handleChange({
-        ...this.state,
-        flavor: flavor[0],
-      });
-    } else {
-      //TODO: Handle error Notification
-    }
+    this.handleChange({
+      ...this.state,
+      flavor,
+    });
   };
 
   setFlavor(props) {
@@ -85,7 +85,13 @@ class RecipeItem extends Component {
   }
 
   render() {
-    const { classes, className, allFlavors, percentAdornment } = this.props;
+    const {
+      allFlavors,
+      classes,
+      className,
+      isLast,
+      percentAdornment,
+    } = this.props;
 
     return (
       <Grid item xs={12}>
@@ -113,6 +119,17 @@ class RecipeItem extends Component {
                     {flavor.name} ({flavor.manufacturer.shortName})
                   </MenuItem>
                 ))
+              }
+              { !isLast
+                ?
+                <MenuItem
+                  key={null}
+                  value={null}
+                  className={classes.menuItem}
+                >
+                  (Remove)
+                </MenuItem>
+                : null
               }
             </TextField>
           </Grid>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { compose } from 'react-apollo';
-import { getIn, List, Map } from 'immutable';
+import { getIn } from 'immutable';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
@@ -112,12 +112,16 @@ class RecipePaper extends Component {
     const recipeItems = [];
 
     this.getIngredient(['recipeItems']).map((recipeItem) => {
+      if (!recipeItem.flavor.flavorId) {
+        return null;
+      }
+
       const flavor = recipeItem.flavor;
       const title = `${flavor.name} (${flavor.manufacturer.shortName})`;
       const percent = recipeItem.percent;
       const ml = (percent / 100) * this.getIngredient(['result', 'amount']);
 
-      recipeItems.push({
+      return recipeItems.push({
         title,
         ml,
         percent,
@@ -257,7 +261,6 @@ class RecipePaper extends Component {
     const recipeName = this.recipe.get('name');
     const base = this.orderBase();
     const recipeItems = this.orderRecipeItems();
-
     return (
       <Paper className={classes.root}>
         <article>
@@ -291,12 +294,15 @@ class RecipePaper extends Component {
                   ))
                 }
 
-                <TableRow className={classes.rowDivider}>
-                  <TableCell />
-                  <TableCell />
-                  <TableCell />
-                </TableRow>
-
+                { recipeItems.length
+                  ?
+                  <TableRow className={classes.rowDivider}>
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                  </TableRow>
+                  : null
+                }
                 {
                   recipeItems.map((row, index) => (
                     <TableRow key={index}>
@@ -319,15 +325,19 @@ class RecipePaper extends Component {
                   <Cell numeric>{this.safeNumber(this.data.base.percent)}</Cell>
                 </TableRow>
 
-                <TableRow>
-                  <Cell>Total flavors</Cell>
-                  <Cell numeric>
-                    {this.safeNumber(this.data.totals.flavors.combined.ml)}
-                  </Cell>
-                  <Cell numeric>
-                    {this.safeNumber(this.data.totals.flavors.combined.percent)}
-                  </Cell>
-                </TableRow>
+                { recipeItems.length
+                  ?
+                  <TableRow>
+                     <Cell>Total flavors</Cell>
+                     <Cell numeric>
+                       {this.safeNumber(this.data.totals.flavors.combined.ml)}
+                     </Cell>
+                     <Cell numeric>
+                       {this.safeNumber(this.data.totals.flavors.combined.percent)}
+                     </Cell>
+                   </TableRow>
+                  : null
+                }
               </TableBody>
             </Table>
           </div>
