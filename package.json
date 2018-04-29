@@ -3,14 +3,46 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "apollo-cache-inmemory": "^1.1.1",
+    "apollo-client": "^2.0.3",
+    "apollo-link": "^1.0.3",
+    "apollo-link-http": "^1.2.0",
+    "classnames": "^2.2.5",
+    "eslint-config-airbnb": "^16.1.0",
+    "graphql": "^0.11.7",
+    "graphql-tag": "^2.5.0",
+    "graphql-tools": "^2.8.0",
+    "history": "^4.7.2",
+    "immutable": "v4.0.0-rc.9",
+    "jss": "^8.1.0",
+    "jss-preset-default": "^3.0.0",
+    "material-ui": "1.0.0-beta.22",
+    "material-ui-icons": "^1.0.0-beta.17",
+    "node-sass-chokidar": "0.0.3",
+    "prop-types": "^15.6.0",
     "react": "^16.0.0",
+    "react-apollo": "^2.0.1",
     "react-dom": "^16.0.0",
-    "react-scripts": "1.0.14"
+    "react-jss": "^7.2.0",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.8",
+    "react-tap-event-plugin": "^3.0.2",
+    "recompose": "^0.26.0",
+    "redux": "^3.7.2",
+    "typeface-roboto": "0.0.41"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "devDependencies": {
+    "eslint": "^4.12.1",
+    "eslint-config-react-app": "^2.0.1",
+    "eslint-plugin-react": "^7.5.1",
+    "react-scripts": "1.0.14"
   }
 }
